@@ -85,30 +85,30 @@
 
     <a href="/ads" class="back-btn">&larr; Back to List</a>
 
-    <form th:action="@{|/ads/${id}/editAd|}" th:object="${adForm}" method="post">
+    <form th:action="@{|/ads/${id}/edit|}" th:object="${adForm}" method="post" enctype="multipart/form-data">
         <!-- Title -->
         <label for="title">Title</label>
-        <input type="text" id="title" name="title" th:field="*{title}" required aria-required="true" />
+        <input type="text" id="title" name="title" th:field="*{title}" />
         <span class="error" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Title Error</span>
 
         <!-- Description -->
         <label for="description">Description</label>
-        <textarea id="description" name="description" rows="4" th:field="*{description}" required></textarea>
+        <textarea id="description" name="description" rows="4" th:field="*{description}" ></textarea>
         <span class="error" th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Description Error</span>
 
         <!-- Location -->
         <label for="location">Location</label>
-        <input type="text" id="location" name="location" th:field="*{location}" required aria-required="true" />
+        <input type="text" id="location" name="location" th:field="*{location}"  aria-required="true" />
         <span class="error" th:if="${#fields.hasErrors('location')}" th:errors="*{location}">Location Error</span>
 
         <!-- Contact -->
         <label for="contact">Contact</label>
-        <input type="text" id="contact" name="contact" th:field="*{contact}" required aria-required="true" />
+        <input type="text" id="contact" name="contact" th:field="*{contact}" required aria-="true" />
         <span class="error" th:if="${#fields.hasErrors('contact')}" th:errors="*{contact}">Contact Error</span>
 
         <!-- Price -->
         <label for="price">Price</label>
-        <input type="number" id="price" name="price" th:field="*{price}" required min="0" step="0.01" />
+        <input type="number" id="price" name="price" th:field="*{price}"  min="0" step="0.01" />
         <span class="error" th:if="${#fields.hasErrors('price')}" th:errors="*{price}">Price Error</span>
 
         <!-- Number of Rooms -->
@@ -123,12 +123,20 @@
 
         <!-- Category -->
         <label for="category">Category</label>
-        <select id="category" name="categoryId" th:field="*{categoryId}" required>
+        <select id="category" name="categoryId" th:field="*{categoryId}" >
             <option value="" disabled selected>Select a category</option>
             <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
         </select>
         <span class="error" th:if="${#fields.hasErrors('categoryId')}" th:errors="*{categoryId}">Category Error</span>
-
+        <div>
+          
+            <label class="form-lablel mt-4" for="file">Photo</label>  
+            <img th:src="${adForm.photo!=null}?@{|/images/${adForm.photo}|}:@{/images/default.png}" 
+            alt="photo"
+            
+            style="max-height: 50px; max-width: 50px;">
+            <input type="file" name="file" class="form-control mt-2">
+        </div>
         <!-- Submit -->
         <button type="submit">Save</button>
     </form>

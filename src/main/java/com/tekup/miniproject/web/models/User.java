@@ -11,13 +11,12 @@ import lombok.Setter;
 @Setter
 public class User {
     private Long id;
+    private String  name;
+    private String role;
+   /*  public User(String name, String role) {
+        this.name = name;
+        this.role = role;
+    } */
 
-    private String firstName;
-    private String lastName;
-    private String email;
-    private String password;
-    private boolean isAdmin;
-    private String image;
-    private String phone;
-    private String adress;
+    
 }

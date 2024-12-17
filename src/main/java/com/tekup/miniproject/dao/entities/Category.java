@@ -15,15 +15,14 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
+@Table(name="Categories")
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY )
     private Long id;
-    @Column(length = 30, nullable = false)
     private String name; 
-    @Column(length = 1000, nullable = true)
     private String description ;
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     private List<Ad> ads;
 
 

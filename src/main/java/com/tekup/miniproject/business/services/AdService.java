@@ -1,29 +1,44 @@
 package com.tekup.miniproject.business.services;
 
 import java.util.List;
+import java.util.Locale.Category;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import com.tekup.miniproject.dao.entities.Ad;
-import com.tekup.miniproject.dao.entities.Photo;
 
-import jakarta.transaction.Transactional;
+
 
 
 
 public interface AdService {
     List<Ad> getAds();
     Ad getAdById(Long id);
-    List<Ad> getAdByLocation(String location);
+
     List<Ad> getAdByTitle(String title);
+    List<Ad> getAdByRooms(Integer number);
+    List<Ad> getAdByCategory(String category);
     List<Ad> getAdByPrice(Double price);
-    List<Ad> getAdByCategoryName(String nameCategory);
-    List<Ad> getAdByArea(Double area);
+    List<Ad> getAdByLocation(String location);
+    List<Ad> getAdByContact(String contact);
+   
+
+
+    List<Ad> getAdSortedByTitle(String order);
+    List<Ad> getAdSortedByLocation(String order);
+    List<Ad> getAdSortedByCategoryName(String order);
+    List<Ad> getAdSortedByArea(String order);
+    
+    Page<Ad> getAllAdPagination(Pageable pegeable);
+    Page<Ad> getAdSortedByPricePagination(String order,Pageable pegeable);
+  
     //create
     Ad addAd(Ad ad);
     //Update
-    Ad updateAd(Ad ad);
+    Ad updateAd(Long id,Ad ad);
     //Delete
     void deleteAdById(Long id);
-    
-    public void addPhotos(List<Photo> photos); 
+   
     
 }

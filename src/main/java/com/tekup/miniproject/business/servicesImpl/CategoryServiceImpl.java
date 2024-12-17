@@ -1,28 +1,35 @@
 package com.tekup.miniproject.business.servicesImpl;
 
 import java.util.List;
-
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.tekup.miniproject.business.services.CategoryService;
 import com.tekup.miniproject.dao.entities.Category;
 import com.tekup.miniproject.dao.repositories.CategoryRepository;
 
+import jakarta.persistence.EntityNotFoundException;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class CategoryServiceImpl implements CategoryService{
-
-    private final CategoryRepository categoryRepository;
-    public CategoryServiceImpl(CategoryRepository categoryRepository){
-     this.categoryRepository=categoryRepository;
-    }
+    @Autowired
+    private CategoryRepository categoryRepository;
+    
     @Override
     public List<Category> getCategories() {
-        return this.categoryRepository.findAll();
+        return categoryRepository.findAll();
     }
 
     @Override
     public Category getCategoryById(Long id) {
-       return this.categoryRepository.findById(id).get();
+      if(id == null)
+      {
+        return null;
+      }
+      return this.categoryRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("Category with id : "+ id + " not found!"));
     }
 
     @Override
@@ -32,18 +39,30 @@ public class CategoryServiceImpl implements CategoryService{
 
     @Override
     public Category addCategory(Category category) {
-        if(category==null){
+      /*  if(category==null){
             return null;
         }
-       return this.categoryRepository.save(category);
+       Category newCategory= new Category();
+       try{
+        newCategory= categoryRepository.save(category);
+
+       } catch(DataIntegrityViolationException e)
+       {
+        log.error(e.getMessage());
+       }
+       return newCategory;*/
+       if(category==null){
+        return null;
+    }
+   return this.categoryRepository.save(category);
     }
 
     @Override
-    public Category updateCategory(Category category) {
-        if(category==null){
-            return null;
-        }
-       return this.categoryRepository.save(category); 
+    public Category updateCategory(Long id,Category category) {
+       Category categoryExisting= this.getCategoryById(id);
+       categoryExisting.setName(category.getName());
+       categoryExisting.setDescription(category.getDescription());
+       return categoryRepository.save(categoryExisting);
     }
 
     @Override
@@ -51,7 +70,14 @@ public class CategoryServiceImpl implements CategoryService{
         if(id==null){
             return ;
         }
-         this.categoryRepository.deleteById(id);
+        else if(this.categoryRepository.existsById(id))
+        {
+            this.categoryRepository.deleteById(id);
+        }
+        else{
+            throw new EntityNotFoundException("Category with id: "+id+ " not found");
+        }
+         
     }
 
 }
