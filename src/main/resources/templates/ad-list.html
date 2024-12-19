@@ -21,7 +21,8 @@
             margin-top: 20px;
         }
 
-        th, td {
+        th,
+        td {
             padding: 10px;
             text-align: left;
             border: 1px solid #ccc;
@@ -58,6 +59,7 @@
             border: none;
             cursor: pointer;
         }
+
         .favorite-btn {
             background-color: transparent;
             border: none;
@@ -79,25 +81,25 @@
     <h1>List of Ads</h1>
 
     <a href="/ads/create" class="add-btn">Add New Ad</a>
-    
+
     <div>
         <form th:action="@{/ads/search}" method="get">
-        
+
             <label for="location">Location:</label>
             <input type="text" id="location" name="location" placeholder="search by location">
-            
+
             <label for="price">Price:</label>
             <input type="text" id="price" name="price" placeholder="search by price">
-            
+
             <label for="rooms">Number of rooms:</label>
             <input type="text" id="rooms" name="rooms" placeholder="search by number of rooms">
-            
+
             <label for="contact">Contact:</label>
             <input type="text" id="contact" name="contact" placeholder="search by contact">
-            
+
             <label for="category">Category:</label>
             <input type="text" id="category" name="category" placeholder="search by category">
-            
+
             <button type="submit">Search</button>
         </form>
     </div>
@@ -105,13 +107,13 @@
     <div class="col-4">
         <p><strong>Sort by Price:</strong></p>
         <form th:action="@{/ads/filter}" method="get" id="filterForm">
-          <label><input type="radio" name="sortByPrice" value="asc" th:checked="${sortByPrice=='asc'}"
-              onchange="submitForm()"> Ascending</label>
-          <label><input type="radio" name="sortByPrice" value="desc" th:checked="${sortByPrice=='desc'}"
-              onchange="submitForm()"> Descending</label>
+            <label><input type="radio" name="sortByPrice" value="asc" th:checked="${sortByPrice=='asc'}"
+                    onchange="submitForm()"> Ascending</label>
+            <label><input type="radio" name="sortByPrice" value="desc" th:checked="${sortByPrice=='desc'}"
+                    onchange="submitForm()"> Descending</label>
         </form>
 
-      </div>
+    </div>
     <table>
         <thead>
             <tr>
@@ -127,21 +129,22 @@
         </thead>
         <tbody>
             <tr th:each="ad, stat : ${ads}" th:class="${stat.index % 2 == 0} ? 'table-light' : ''">
-                
+
                 <td th:text="${ad.title}"></td>
                 <td th:text="${ad.description}"></td>
                 <td th:text="${ad.location}"></td>
                 <td th:text="${ad.price}"></td>
                 <td th:text="${ad.category.name}"></td>
                 <td>
-                    <img th:src="(${ad.photo}?@{|/images/${ad.photo}|}:@{'/images/default.png'})" 
-                         alt="photo" style="max-height: 100px; max-width: 100px;">
+                    <img th:src="(${ad.photo}?@{|/images/${ad.photo}|}:@{'/images/default.png'})" alt="photo"
+                        style="max-height: 100px; max-width: 100px;">
                 </td>
                 <td>
-                <form th:action="@{|/ads/${ad.id}/addFavoris|}" method="post">
-                    <button type="submit" class="favorite-btn" th:classappend="${ad.isFavoris} ? 'favorited' : ''">
-                        &#9733;
-                    </button></td>
+                    <form th:action="@{|/ads/${ad.id}/addFavoris|}" method="post">
+                        <button type="submit" class="favorite-btn" th:classappend="${ad.isFavoris} ? 'favorited' : ''">
+                            &#9733;
+                        </button>
+                </td>
                 </form>
                 <td>
                     <div class="actions">
@@ -160,8 +163,30 @@
     </table>
     <div class="alert" th:if="${#lists.isEmpty(ads)}">
         No ads found!
-      </div>
-   
+    </div>
+
+    <div>
+        <ul class="pagination pagination-sm">
+            <li class="page-item" th:classappend="${currentPage==0?'disabled':''}">
+                <a class="page-link"
+                    th:href="${sortByPrice==null}?@{|/ads?page=${currentPage-1}|}:@{|/ads/filter?sortByPrice=${sortByPrice}&page=${currentPage-1}|}">&laquo;</a>
+            </li>
+            <li th:each="index: ${#numbers.sequence(0,totalPages -1)}" class="page-item"
+                th:classappend="${currentPage==index ?'active':''}">
+                <a class="page-link"
+                    th:href="${sortByPrice==null}?@{|/ads?page=${index}|}:@{|/ads/filter?sortByPrice=${sortByPrice}&page=${index}|}"
+                    th:text="${index+1}"></a>
+            </li>
+
+            <li class="page-item" th:classappend="${currentPage== totalPages -1?'disabled':''}">
+                <a class="page-link"
+                    th:href="${sortByPrice==null}?@{|/ads?page=${currentPage+1}|}:@{|/ads/filter?sortByPrice=${sortByPrice}&page=${currentPage+1}|}">&raquo;</a>
+            </li>
+        </ul>
+    </div>
+
+
+
 
     <script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
     <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>

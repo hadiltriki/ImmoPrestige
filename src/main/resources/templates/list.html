@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>List of Ads</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+                body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f3f4f6;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Global Styles */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header Section */
+        .hero-section {
+            text-align: center;
+            padding: 100px 20px;
+            background: linear-gradient(135deg, #1cc88a, #4e73df);
+            color: #fff;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-section h1 {
+            font-size: 3.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+        }
+        .hero-section p {
+            font-size: 1.3rem;
+            margin-bottom: 30px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        .hero-section .btn {
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+        .hero-section .btn-primary:hover {
+            transform: scale(1.1);
+            background-color: #198754;
+        }
+
+        /* Navigation Bar */
+        .navbar {
+            background-color: #fff;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        .navbar-brand {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #1cc88a;
+        }
+        .nav-link {
+            color: #333;
+            font-size: 1rem;
+            transition: color 0.3s ease;
+        }
+        .nav-link:hover {
+            color: #1cc88a;
+        }
+
+        /* Filter Section */
+        .filter-section {
+            background: #e9ecef;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        .filter-section input {
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            padding: 10px;
+        }
+        .filter-section button {
+            background: #1cc88a;
+            border: none;
+            color: #fff;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        .filter-section button:hover {
+            background: #138c6c;
+        }
+
+        /* Table Section */
+        .table-container {
+            background: #fff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+        .table {
+            margin: 0;
+        }
+        .table th {
+            background-color: #1cc88a;
+            color: #fff;
+            font-weight: bold;
+        }
+        .table td {
+            vertical-align: middle;
+        }
+        .table img {
+            max-width: 80px;
+            border-radius: 5px;
+        }
+        .favorite-btn {
+            border: none;
+            background: transparent;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: #ccc;
+            transition: color 0.3s ease;
+        }
+        .favorite-btn.favorited {
+            color: gold;
+        }
+        .favorite-btn:hover {
+            color: #ffa500;
+        }
+
+        /* Add Button */
+        .add-btn {
+            background-color: #4e73df;
+            color: #fff;
+            border-radius: 30px;
+            font-weight: bold;
+            padding: 10px 20px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        .add-btn:hover {
+            background-color: #3751b4;
+            transform: scale(1.1);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-section h1 {
+                font-size: 2.5rem;
+            }
+            .hero-section p {
+                font-size: 1rem;
+            }
+            .table-container {
+                padding: 15px;
+            }
+            .filter-section {
+                padding: 10px;
+            }
+            .add-btn {
+                font-size: 0.9rem;
+                padding: 8px 16px;
+            }
+        }
+
+        
+    </style>
+</head>
+
+<body>
+    <div th:insert="header :: header"></div>
+    <div class="container my-5">
+        <h1 class="text-center mb-4">List of Ads</h1>
+        <div class="text-end mb-3">
+            <a href="/ads/create" class="btn add-btn">Add New Ad</a>
+        </div>
+
+        <!-- Filter Form -->
+        <div class="filter-section mb-4 p-4 rounded bg-light">
+            <form class="row g-3">
+                <div class="col-md-3">
+                    <input type="text" class="form-control" id="location" name="location" placeholder="Search by location">
+                </div>
+                <div class="col-md-3">
+                    <input type="text" class="form-control" id="price" name="price" placeholder="Search by price">
+                </div>
+                <div class="col-md-3">
+                    <input type="text" class="form-control" id="rooms" name="rooms" placeholder="Number of rooms">
+                </div>
+                <div class="col-md-3">
+                    <button type="submit" class="btn btn-success w-100">Search</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Ads Table -->
+        <div class="table-container">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Description</th>
+                        <th>Location</th>
+                        <th>Price</th>
+                        <th>Category</th>
+                        <th>Photo</th>
+                        <th>Favorites</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Sample Ad 1</td>
+                        <td>Beautiful house near the city center.</td>
+                        <td>New York</td>
+                        <td>$500,000</td>
+                        <td>Real Estate</td>
+                        <td><img src="https://via.placeholder.com/100" alt="Ad Photo" class="img-thumbnail"></td>
+                        <td>
+                            <button class="favorite-btn">&#9733;</button>
+                        </td>
+                        <td class="actions">
+                            <a href="#" class="btn btn-primary">Edit</a>
+                            <a href="#" class="btn btn-danger">Delete</a>
+                        </td>
+                    </tr>
+                    <!-- Repeat rows for other ads -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

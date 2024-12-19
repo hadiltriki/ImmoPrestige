@@ -7,6 +7,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.OptionalDouble;
+import java.util.OptionalInt;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -61,7 +64,32 @@ public class AdController {
         this.adService = adService;
         this.categoryService = categoryService;
     }
-    @RequestMapping()
+
+
+    @RequestMapping("/home")
+public String getThreePersons(Model model) {
+    List<Ad> ads = this.adService.getAds(); // Récupérer toutes les annonces
+    int adsCount = ads.size(); // Nombre d'annonces dans la liste
+    
+    // Condition pour limiter le nombre d'annonces affichées
+    if (adsCount == 2) {
+        ads = ads.stream().limit(2).collect(Collectors.toList()); // Afficher 2 annonces
+    } else if (adsCount >= 3) {
+        ads = ads.stream().limit(3).collect(Collectors.toList()); // Afficher 3 annonces
+    } else {
+        ads = new ArrayList<>(); // Ne rien afficher si la taille est inférieure à 1 ou autre condition
+    }
+
+    model.addAttribute("ads", ads); 
+    
+    return "homeP";  // Retourner la vue avec la liste des annonces
+}
+
+
+
+
+
+   /* @RequestMapping()
     public String getAllPerson( @RequestParam(defaultValue = "0") int page,
     @RequestParam(defaultValue = "3") int pageSize
     ,Model model) {
@@ -72,14 +100,39 @@ public class AdController {
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", adPage.getTotalPages());
        return "ad-list";
-    } /* @RequestMapping()
-    public String getAllPerson(Model model) {
-       
-        model.addAttribute("ads", this.adService.getAds());
-         return "ad-list";
-     }
- */
+    } */
+    
+  @RequestMapping()
+    public String getAllPersons(Model model) {
+        List<Ad> ads = this.adService.getAds();
+         OptionalDouble minPrice = ads.stream().mapToDouble(Ad::getPrice).min(); 
+    OptionalDouble maxPrice = ads.stream().mapToDouble(Ad::getPrice).max(); 
+    OptionalDouble minArea = ads.stream().mapToDouble(Ad::getArea).min(); 
+    OptionalDouble maxArea = ads.stream().mapToDouble(Ad::getArea).max(); 
+    List<Integer> distinctRooms = ads.stream()
+    .map(Ad::getNumberOfRooms)      // Récupérer le nombre de chambres
+    .distinct()                     // Garder les valeurs distinctes
+    .sorted()                       // Trier les valeurs
+    .limit(4)                       // Limiter à 4
+    .collect(Collectors.toList());  // Collecter dans une liste
 
+// Récupérer la 4ème valeur (si elle existe)
+Integer roomsPlus = distinctRooms.size() == 4 ? distinctRooms.get(3) : null;
+
+// Ajouter la liste au modèle pour l'utiliser dans la vue
+model.addAttribute("distinctRooms", distinctRooms);
+model.addAttribute("roomsPlus", roomsPlus);
+
+    model.addAttribute("minPrice", minPrice.isPresent() ? minPrice.getAsDouble() : 0); 
+    model.addAttribute("maxPrice", maxPrice.isPresent() ? maxPrice.getAsDouble() : 0); 
+    model.addAttribute("minArea", minArea.isPresent() ? minArea.getAsDouble() : 0); 
+    model.addAttribute("maxArea", maxArea.isPresent() ? maxArea.getAsDouble() : 0); 
+  
+        model.addAttribute("ads", this.adService.getAds());
+        model.addAttribute("categories", this.categoryService.getCategories());
+         return "catalogue";
+     }
+ 
 
 
     @RequestMapping("/filter")
@@ -87,7 +140,7 @@ public class AdController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "3") int pageSize,
             Model model) {
-        Page<Ad> adPage = this.adService.getAdSortedByPricePagination(sortByPrice,
+                Page<Ad> adPage = this.adService.getAdSortedByPricePagination(sortByPrice,
                 PageRequest.of(page, pageSize));
         model.addAttribute("ads", adPage.getContent());
         model.addAttribute("sortByPrice", sortByPrice);
