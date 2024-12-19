@@ -217,6 +217,9 @@ model.addAttribute("roomsPlus", roomsPlus);
             }
 
         }
+        System.out.println("Titre : " + adForm.getTitle());
+System.out.println("Catégorie : " + adForm.getCategoryId());
+System.out.println("Fichier : " + file.getOriginalFilename());
 
         return "redirect:/ads";
     }
