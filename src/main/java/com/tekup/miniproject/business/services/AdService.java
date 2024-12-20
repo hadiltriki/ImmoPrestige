@@ -22,7 +22,9 @@ public interface AdService {
     List<Ad> getAdByPrice(Double price);
     List<Ad> getAdByLocation(String location);
     List<Ad> getAdByContact(String contact);
+    List<Ad> getAdByType(String adType);
    
+ 
 
 
     List<Ad> getAdSortedByTitle(String order);

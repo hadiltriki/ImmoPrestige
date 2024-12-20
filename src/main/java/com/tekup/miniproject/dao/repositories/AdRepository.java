@@ -17,7 +17,7 @@ public interface AdRepository extends JpaRepository<Ad,Long> {
     List<Ad> findByArea(Double area);
     List<Ad> findByNumberOfRooms(Integer numberOfRooms);
     List<Ad> findByContact(String contact);
-
+    List<Ad> findByAdType(String adType);
 
 
     

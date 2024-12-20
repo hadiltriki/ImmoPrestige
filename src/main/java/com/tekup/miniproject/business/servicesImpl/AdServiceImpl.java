@@ -57,8 +57,13 @@ public class AdServiceImpl implements AdService{
         return this.adRepository.findByTitle(title);
     }
 
-  
-  
+    @Override
+    public List<Ad> getAdByType(String adType) {
+        if (adType == null || adType.isEmpty()) {
+            return null; 
+        }
+        return this.adRepository.findByAdType(adType);
+    }
 
     @Override
     public Ad addAd(Ad ad) {

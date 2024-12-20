@@ -130,8 +130,8 @@
         <div class="container">
             <h1>Votre Futur Commence Ici</h1>
             <p>Découvrez des propriétés d'exception adaptées à vos besoins et à votre budget.</p>
-            <a href="#" class="btn btn-primary me-3">Voir Nos Offres</a>
-            <a href="#" class="btn btn-outline-light">Ajouter Votre Bien</a>
+            <a th:href="@{/ads}" class="btn btn-primary me-3">Voir Nos Offres</a>
+            <a th:href="@{/ads/create}" class="btn btn-outline-light">Ajouter Votre Bien</a>
         </div>
     </header>
 
@@ -154,7 +154,7 @@
           
         </div>
         <div class="mt-3">
-            <a href="catalogue" class="btn btn-outline-primary w-100">Consulter plus</a>
+            <a  th:href="@{/ads}" class="btn btn-outline-primary w-100">Consulter plus</a>
         </div>
     </section>
 

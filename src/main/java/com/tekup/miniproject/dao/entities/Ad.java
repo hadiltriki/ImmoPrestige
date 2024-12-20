@@ -23,9 +23,13 @@ public class Ad {
     private Double price;
     private Integer numberOfRooms;
     private Double area;
+    
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
+
     private String photo;
     private boolean isFavoris;
+    private String adType;
+
 }

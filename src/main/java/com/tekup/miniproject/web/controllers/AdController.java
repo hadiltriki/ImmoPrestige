@@ -165,6 +165,7 @@ model.addAttribute("roomsPlus", roomsPlus);
         if (bindingResult.hasErrors()) {
             model.addAttribute("error", "Invalid input");
             model.addAttribute("categories", this.categoryService.getCategories());
+           
             return "add-ad";
         }
         Ad ad = new Ad();
@@ -175,6 +176,7 @@ model.addAttribute("roomsPlus", roomsPlus);
         ad.setPrice(adForm.getPrice());
         ad.setNumberOfRooms(adForm.getNumberOfRooms());
         ad.setArea(adForm.getArea());
+        ad.setAdType(adForm.getAdType());  
         Category category = categoryService.getCategoryById(adForm.getCategoryId());
         ad.setCategory(category);
 
@@ -196,7 +198,8 @@ model.addAttribute("roomsPlus", roomsPlus);
                 model.addAttribute("errorMessage", "Erreur lors de l'ajout de l'annonce: " + e.getMessage());
                 System.out.println("Erreur lors de l'ajout de l'annonce : " + e.getMessage());
                 model.addAttribute("categories", this.categoryService.getCategories());
-
+               
+    
                 // Retourner la vue de création d'annonce en cas d'erreur
                 return "add-ad";
 
@@ -233,12 +236,13 @@ model.addAttribute("roomsPlus", roomsPlus);
                 ad.getPrice(),
                 ad.getNumberOfRooms(),
                 ad.getArea(),
-                ad.getCategory().getId(),ad.getPhoto(), ad.isFavoris()
+                ad.getCategory().getId(),ad.getPhoto(), ad.isFavoris(), ad.getAdType() 
                 /* if ad(getbyid) exist in favoris where user= userConnecté */
         ));
         model.addAttribute("id", id);
        
         model.addAttribute("categories", this.categoryService.getCategories());
+        
         return "edit-ad";
     }
 
@@ -251,6 +255,7 @@ model.addAttribute("roomsPlus", roomsPlus);
             @RequestParam MultipartFile file) {
 
         if (bindingResult.hasErrors()) {
+            
             return "edit-ad";
         }
 
@@ -264,6 +269,7 @@ model.addAttribute("roomsPlus", roomsPlus);
         ad.setArea(adForm.getArea());
         ad.setNumberOfRooms(adForm.getNumberOfRooms());
         ad.setFavoris(adForm.isFavoris());
+        ad.setAdType(adForm.getAdType());
         Category category = this.categoryService.getCategoryById(adForm.getCategoryId());
         ad.setCategory(category);
     
@@ -321,6 +327,7 @@ model.addAttribute("roomsPlus", roomsPlus);
             @RequestParam(required = false) Integer rooms,
             @RequestParam(required = false) String contact,
             @RequestParam(required = false) String category,
+            @RequestParam(required = false) String adType,
             Model model) {
 
         List<Ad> results;
@@ -333,6 +340,8 @@ model.addAttribute("roomsPlus", roomsPlus);
             results = adService.getAdByRooms(rooms);
         } else if (category != null && !category.isEmpty()) {
             results = adService.getAdByCategory(category);
+        }else if (adType != null && !adType.isEmpty()) { // Filtrer par type
+            results = adService.getAdByType(adType); 
         }
         else if (contact != null && !contact.isEmpty()) {
             results = adService.getAdByContact(contact);

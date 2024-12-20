@@ -9,6 +9,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
     <link rel="stylesheet" href="style.css">
     <style>
         /* =========================
@@ -246,7 +250,7 @@ input[type="range"] {
     position: absolute;
     top: 10px;
     left: 10px;
-    background-color: #0094fe;
+    background-color: #d0eee3;
     color: #ffffff;
     padding: 6px 12px;
     border-radius: 25px;
@@ -256,10 +260,42 @@ input[type="range"] {
     transition: background-color 0.3s ease;
 }
 
-.price-badge:hover {
-    background-color: #198754 ;
-    
+
+
+.property-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
 }
+
+.property-card .vente-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px; /* Place le badge à l'autre côté de la carte */
+    background-color: #e48f4a;
+    color: #ffffff;
+    padding: 6px 12px;
+    border-radius: 25px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+}
+.property-card .location-badge
+ {
+    position: absolute;
+    top: 10px;
+    right: 10px; /* Place le badge à l'autre côté de la carte */
+    background-color: #37bde2;
+    color: #ffffff;
+    padding: 6px 12px;
+    border-radius: 25px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+}
+
+
 
 .property-card:hover {
     transform: translateY(-8px);
@@ -267,31 +303,10 @@ input[type="range"] {
 }
 
 .property-card .card-body p {
-    color: #ffffff;
-}
-/* Surface Section */
-.surface-info {
-    font-size: 1rem;
-    color: #555;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    margin-top: 10px;
+    color: #2f2f2fab;
+    
 }
 
-.surface-info i {
-    color: #198754; /* Icône en vert */
-    font-size: 1.2rem;
-}
-
-.highlighted-surface {
-    font-weight: bold;
-    color: #333;
-    background-color: #e9f7f0;
-    padding: 3px 8px;
-    border-radius: 5px;
-    transition: background-color 0.3s ease, color 0.3s ease;
-}
 
 
 
@@ -432,6 +447,169 @@ input[type="range"] {
     border-color: #1cc88a;
     box-shadow: 0 0 8px rgba(28, 200, 138, 0.4);
 }
+/* Conteneur des boutons */
+.property-card .action-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+/* Style pour les boutons */
+.property-card .action-buttons .btn {
+    font-size: 0.875rem; /* Police plus petite */
+    padding: 8px 15px;
+    border-radius: 5px; /* Bords arrondis */
+    text-transform: uppercase; /* Texte en majuscule */
+    font-weight: 600; /* Texte plus gras */
+    width: 100%; /* Pour les petits écrans, les boutons sont en pleine largeur */
+}
+
+/* Détails (vert) */
+.property-card .action-buttons .btn-info {
+    background-color: #198754; /* Vert */
+    color: white;
+    border: none;
+    transition: background-color 0.3s;
+}
+
+.property-card .action-buttons .btn-info:hover {
+    background-color: #218838; /* Vert foncé au survol */
+}
+
+/* Modifier (orange) */
+.property-card .action-buttons .btn-warning {
+    background-color: #fd7e14; /* Orange */
+    color: white;
+    border: none;
+    transition: background-color 0.3s;
+}
+
+.property-card .action-buttons .btn-warning:hover {
+    background-color: #e67e22; /* Orange foncé au survol */
+}
+
+/* Supprimer (rouge) */
+.property-card .action-buttons .btn-danger {
+    background-color: #dc3545; /* Rouge */
+    color: white;
+    border: none;
+    transition: background-color 0.3s;
+}
+
+.property-card .action-buttons .btn-danger:hover {
+    background-color: #c82333; /* Rouge foncé au survol */
+}
+
+/* Responsive - pour petits écrans */
+@media (max-width: 768px) {
+    .property-card .action-buttons {
+        flex-direction: column; /* Empiler les boutons en colonne */
+    }
+
+    .property-card .action-buttons .btn {
+        width: 100%; /* Les boutons prennent toute la largeur */
+    }
+}
+
+/* Ajout d'un léger effet de survol pour toute la carte */
+.property-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+}
+
+/* Styles généraux pour la modale */
+.modal-content {
+    background: linear-gradient(to bottom right, #ffffff, #f9fafb);
+    border-radius: 10px;
+    border: none;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    font-family: 'Poppins', sans-serif;
+    text-align: center; /* Centre tout le contenu par défaut */
+}
+
+/* En-tête de la modale */
+.modal-header {
+    background-color: #1cc88a; /* Couleur principale */
+    color: #fff;
+    padding: 15px 20px;
+    border-bottom: none;
+    display: flex;
+    justify-content: center; /* Centre le titre */
+    align-items: center;
+}
+
+.modal-header .modal-title {
+    font-size: 1.8rem; /* Augmente la taille du titre */
+    font-weight: bold;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.modal-header .btn-close {
+    position: absolute;
+    right: 20px;
+    top: 15px;
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 1.2rem;
+    opacity: 0.8;
+}
+
+.modal-header .btn-close:hover {
+    opacity: 1;
+}
+
+/* Contenu de la modale */
+.modal-body {
+    padding: 20px;
+    color: #333;
+    text-align: center; /* Centre le texte */
+}
+
+.modal-body img {
+    width: 100%;
+    max-width: 400px; /* Limite la largeur de l'image */
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.modal-body p {
+    margin-bottom: 15px;
+    font-size: 1.2rem; /* Augmente la taille du texte */
+    line-height: 1.6;
+}
+
+.modal-body p strong {
+    color: #198754;
+    font-weight: 600;
+    font-size: 1.3rem; /* Augmente la taille des libellés */
+}
+/* Footer */
+footer {
+            background: #ffffff;
+            color: rgb(0, 0, 0);
+            padding: 20px 0;
+            text-align: center;
+        }
+
+/* Responsiveness */
+@media (max-width: 768px) {
+    .modal-dialog {
+        width: 90%;
+        max-width: none;
+        margin: 10px auto;
+    }
+
+    .modal-body {
+        font-size: 1rem; /* Taille ajustée pour mobile */
+    }
+}
+
 
 /* =========================
    Responsivité
@@ -470,72 +648,81 @@ input[type="range"] {
             <!-- Barre de Filtres -->
             <aside class="col-md-3">
                 <section class="filter-section">
-                    <h5>Filtres de Recherche</h5>
-                    <form id="filterForm">
+                    <h5 class="mb-4">Filtres de Recherche</h5>
+                    <form id="filterForm" th:action="@{/filter}" method="get">
                         <!-- Type de Propriété -->
                         <div class="mb-3">
                             <label for="type" class="form-label">Type de Propriété</label>
-                            <select id="type" class="form-select">
+                            <select id="type" class="form-select" name="type">
                                 <option value="all">Tous</option>
-                               
-                                <option th:each="category : ${categories}" th:value="${category.id}" 
-                                th:text="${category.name}"></option>
-                           
+                                <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
                             </select>
                         </div>
-                       <!-- Budget -->
+            
+<!-- Budget -->
+<div class="mb-3 filter-card">
+    <label class="form-label fw-bold">Budget (DT)</label>
+    <!-- Champ pour entrer une valeur -->
+    <input type="number" id="budgetInput" name="budgetInput" class="form-control" 
+           placeholder="Saisir un budget" 
+           min="${minPrice}" max="${maxPrice}" step="0.1" 
+           th:value="${minPrice}"  th:attr="oninput='validateBudget(this, ' + ${minPrice} + ', ' + ${maxPrice} + ')'">
+    <!-- Remarque pour guider l'utilisateur -->
+    <small class="text-muted">
+        Veuillez saisir une valeur entre <span th:text="${minPrice}">0</span> DT et <span th:text="${maxPrice}">2000000</span> DT.
+    </small>
+</div>
+
+<!-- Surface -->
+<div class="mb-3 filter-card">
+    <label class="form-label fw-bold">Surface (m²)</label>
+    <!-- Champ pour entrer une valeur -->
+    <input type="number" id="surfaceInput" name="surfaceInput" class="form-control" 
+           placeholder="Saisir une surface" 
+           min="${minArea}" max="${maxArea}" step="0.1" 
+           th:value="${minArea}"  th:attr="oninput='validateSurface(this, ' + ${minArea} + ', ' + ${maxArea} + ')'">
+    <!-- Remarque pour guider l'utilisateur -->
+    <small class="text-muted">
+        Veuillez saisir une valeur entre <span th:text="0">0</span> m² et <span th:text="5000">5000</span> m².
+    </small>
+</div>
+
+
+
+
+            
+                        <!-- Nombre de Chambres -->
                         <div class="mb-3 filter-card">
-                            <label class="form-label fw-bold">Budget (DT)</label>
-                            <div class="d-flex align-items-center">
-                           
-                                <input type="number" id="budgetMin" class="form-control me-2" placeholder="Min" min="0" max="2000000" step="100000"
-                                       th:value="${minPrice}">
-                                
-                                <span class="mx-2">à</span>
-                                
-                                <input type="number" id="budgetMax" class="form-control ms-2" placeholder="Max" min="0" max="2000000" step="100000"
-                                       th:value="${maxPrice}">
-                            </div>
-                            <input type="range" id="priceRange" class="form-range mt-2" min="0" max="2000000" step="100000" value="2000000">
-                            <small id="priceLabel" th:text="'Budget sélectionné : Jusqu\'à ' + ${maxPrice}+ DT">Budget sélectionné : Jusqu'à [maxPrice]</small>
-
-                        </div>
-
-                        <!-- Surface -->
-                        <div class="mb-3 filter-card">
-                            <label class="form-label fw-bold">Surface (m²)</label>
-                            <div class="d-flex align-items-center">
-                                <input type="number" id="surfaceMin" class="form-control me-2" placeholder="Min" min="0" max="500" step="10"   th:value="${minArea}">
-                                <span class="mx-2">à</span>
-                                <input type="number" id="surfaceMax" class="form-control ms-2" placeholder="Max" min="0" max="500" step="10"   th:value="${maxArea}">
-                            </div>
-                            <input type="range" id="surfaceRange" class="form-range mt-2" min="0" max="500" step="10" value="500">
-                            <small id="surfaceLabel" th:text="'Surface sélectionnée : Jusqu\'à ' + ${maxArea} + 'm²'">Surface sélectionnée : Jusqu'à [maxArea]m²</small>
-
-                            
-                        </div>
-
-                        <div class="filter-card">
                             <label for="rooms" class="form-label">Nombre de Chambres</label>
-                            <select id="rooms" class="form-select">
+                            <select id="rooms" name="rooms" class="form-select">
                                 <option value="all">Tous</option>
-                                <!-- Boucle sur les nombres de chambres distincts -->
                                 <option th:each="room : ${distinctRooms}" th:value="${room}" th:text="${room} + ' Chambre(s)'"></option>
-                                <!-- Option pour les chambres supérieures à la 4ème valeur -->
                                 <option th:if="${roomsPlus != null}" th:value="${roomsPlus}" th:text="${roomsPlus} + ' Chambres+'"></option>
                             </select>
-                            
                         </div>
-
-                        <div class="filter-card">
+            
+                        <!-- Type de Propriété -->
+                        <div class="mb-3 filter-card">
+                            <label for="propertyType" class="form-label">Type de Propriété</label>
+                            <select id="propertyType" name="propertyType" class="form-select">
+                                <option value="all">Tous</option>
+                                <option value="sale">Vente</option>
+                                <option value="rental">Location</option>
+                            </select>
+                        </div>
+            
+                        <!-- Localisation -->
+                        <div class="mb-3 filter-card">
                             <label for="location" class="form-label">Localisation</label>
-                            <input type="text" id="location" class="form-control" placeholder="Entrez une ville...">
+                            <input type="text" id="location" name="location" class="form-control" placeholder="Entrez une ville...">
                         </div>
+            
                         <!-- Bouton Filtrer -->
-                        <button type="submit"  class="btn-filter">Filtrer</button>
+                        <button type="submit" class="btn btn-primary w-100 mt-3">Filtrer</button>
                     </form>
                 </section>
             </aside>
+            
 
             <!-- Liste des Propriétés -->
 <section class="col-md-9 col-12">
@@ -549,29 +736,89 @@ input[type="range"] {
         </select>
     </div>
 
-    <h3 class="mb-4">Propriétés Disponibles</h3>
-        <div id="propertyList" class="row g-4">
-            <!-- Itération sur les propriétés -->
-           
-    <div class="col-md-4" th:each="ad : ${ads}">
-        <div class="card">
-            <img th:src="${ad.photo != null ? '/images/' + ad.photo : '/images/default.png'}" alt="Photo">
-            <h5 th:text="${ad.title}">Titre de la propriété</h5>
-            <p th:text="${ad.price + ' DT'}">Prix</p>
-            <p th:text="${ad.area + ' m²'}">Surface</p>
-        </div>
+    <!-- Button to Create New Listing -->
+
+<div class="mb-3">
+    <h3>Bienvenue Administrateur ! </h3>
+    <div class="d-flex align-items-center">
+        <a th:href="@{/ads/create}" class="btn btn-primary me-2">Créer une Annonce</a>
+        <span>Si vous souhaitez ajouter une annonce, cliquez ici.</span>
     </div>
-        </div>
+</div>
 
 
-      
-  
-       
-      
-
-
-    </div>
     
+    
+
+
+  <!-- Liste des propriétés -->
+<h3 class="mb-4">Propriétés Disponibles</h3>
+<div id="propertyList" class="row g-4">
+    <!-- Itération sur les propriétés pour les cartes -->
+    <div class="col-md-4" th:each="ad : ${ads}">
+        <div class="card property-card">
+            <img th:src="${ad.photo != null ? '/images/' + ad.photo : '/images/default.png'}" class="card-img-top" alt="Photo">
+            <div class="card-body">
+                <h5 class="card-title" th:text="${ad.title}">Titre de la propriété</h5>
+                <p class="price-badge" th:text="${ad.price + ' DT'}">Prix</p>
+                <p th:classappend="${ad.adType == 'vente'} ? 'vente-badge' : 'location-badge'"  th:text="${ad.adType}">Type</p>
+                <p class="card-body" th:text="${ad.area + ' m²'}">Surface</p>
+
+                <!-- Boutons d'action -->
+                <div class="d-flex justify-content-between">
+                    <!-- Bouton pour ouvrir la modale correspondante -->
+                    <button class="btn btn-info btn-sm" data-bs-toggle="modal" th:data-bs-target="'#propertyModal-' + ${ad.id}">
+                        Détails
+                    </button>
+
+                    <a th:href="@{|/ads/${ad.id}/edit|}" class="btn btn-warning btn-sm">
+                        Modifier
+                    </a>
+                    <button class="btn btn-danger btn-sm" onclick="confirmDelete('${ad.id}')">
+                        Supprimer
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modales pour chaque propriété -->
+<div th:each="ad : ${ads}">
+    <div class="modal fade" th:id="'propertyModal-' + ${ad.id}" tabindex="-1" aria-labelledby="propertyModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" th:text="'Détails de la propriété : ' + ${ad.title}">Détails de la propriété</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                </div>
+                <div class="modal-body">
+                    <img th:src="${ad.photo != null ? '/images/' + ad.photo : '/images/default.png'}" class="img-fluid mb-3" alt="Photo de la propriété">
+                    <p><strong>Titre :</strong> <span th:text="${ad.title}">Titre</span></p>
+                    <p><strong>Description :</strong> <span th:text="${ad.description}">Description</span></p>
+                    <p><strong>Emplacement :</strong> <span th:text="${ad.location}">Emplacement</span></p>
+                    <p><strong>Contact :</strong> <span th:text="${ad.contact}">Contact</span></p>
+                    <p><strong>Prix :</strong> <span th:text="${ad.price + ' DT'}">Prix</span></p>
+                    <p><strong>Nombre de pièces :</strong> <span th:text="${ad.numberOfRooms}">Nombre de pièces</span></p>
+                    <p><strong>Surface :</strong> <span th:text="${ad.area + ' m²'}">Surface</span></p>
+                    <p><strong>Catégorie :</strong> <span th:text="${ad.category.name}">Catégorie</span></p>
+                    <p><strong>Type d'annonce :</strong> <span th:text="${ad.adType}">Type</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+
+
+
+
+
+    
+
+
 
 
     <!-- Pagination -->
@@ -593,30 +840,36 @@ input[type="range"] {
 
 </section>
 
-<!-- Modal pour Détails Propriété -->
-<div class="modal fade" id="propertyModal" tabindex="-1" aria-labelledby="propertyModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="propertyModalLabel">Détails de la Propriété</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div id="modalContent">
-                    <!-- Contenu dynamique sera injecté ici -->
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+  
+
+
+
         </div>
     </main>
+<script>
+    function validateBudget(input, minPrice, maxPrice) {
+        if (input.value < minPrice) {
+            input.value = minPrice; // Empêche d'aller en dessous de minPrice
+        } else if (input.value > maxPrice) {
+            input.value = maxPrice; // Empêche de dépasser maxPrice
+        }
+    }
 
+    function validateSurface(input, minArea, maxArea) {
+        if (input.value < minArea) {
+            input.value = minArea; // Empêche d'aller en dessous de minArea
+        } else if (input.value > maxArea) {
+            input.value = maxArea ; // Empêche de dépasser maxArea
+        }
+    }
+</script>
    
 
-    <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="scripts.js"></script>
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+
+  
 </body>
  <!-- Footer -->
  <footer class="bg-dark text-white text-center py-3 mt-4">

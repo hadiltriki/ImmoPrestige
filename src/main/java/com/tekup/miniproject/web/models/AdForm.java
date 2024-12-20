@@ -53,5 +53,12 @@ public class AdForm {
     private String photo;
     private boolean isFavoris;
 
+    @NotBlank(message = "The ad type is required.")
+    @Size(max = 50, message = "The ad type cannot exceed 50 characters.")
+    private String adType;
+
+
+
+
 
 }
