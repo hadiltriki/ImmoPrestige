@@ -738,8 +738,8 @@ footer {
 
     <!-- Button to Create New Listing -->
 
-<div class="mb-3">
-    <h3>Bienvenue Administrateur ! </h3>
+<div class="mb-3" sec:authorize="isAuthenticated()">
+    <h3>Bienvenue <span sec:authentication="name"></span> </h3>
     <div class="d-flex align-items-center">
         <a th:href="@{/ads/create}" class="btn btn-primary me-2">Créer une Annonce</a>
         <span>Si vous souhaitez ajouter une annonce, cliquez ici.</span>
@@ -771,10 +771,10 @@ footer {
                         Détails
                     </button>
 
-                    <a th:href="@{|/ads/${ad.id}/edit|}" class="btn btn-warning btn-sm">
+                    <a th:href="@{|/ads/${ad.id}/edit|}" sec:authorize="isAuthenticated()" class="btn btn-warning btn-sm">
                         Modifier
                     </a>
-                    <button class="btn btn-danger btn-sm" onclick="confirmDelete('${ad.id}')">
+                    <button class="btn btn-danger btn-sm" sec:authorize="isAuthenticated()" onclick="confirmDelete('${ad.id}')">
                         Supprimer
                     </button>
                 </div>

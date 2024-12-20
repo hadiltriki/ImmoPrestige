@@ -9,32 +9,28 @@
         <!-- Navigation Bar -->
         <nav class="navbar navbar-expand-lg navbar-light fixed-top">
             <div class="container">
-<<<<<<< HEAD
-                <a class="navbar-brand" th:href="@{/ads/home}">ImmoPrestige</a>
-=======
-                <img src="/images/slogo.png" alt="Une belle vue" width="100" height="100" />
 
-                <a class="navbar-brand" href="#">ImmoPrestige</a>
->>>>>>> 670f3ff102e89134c1f4e59272ee87104ab33621
+
+                
+
+                <a class="navbar-brand" th:href="@{/home}"><img src="/images/slogo.png" alt="Une belle vue" width="100" height="100" /></a>
+
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto">
-<<<<<<< HEAD
-                        <li class="nav-item"><a class="nav-link" th:href="@{/ads/home}">Accueil</a></li>
-                        <li class="nav-item"><a class="nav-link" th:href="@{/ads}">Gérer Annonce</a></li>
-                        <li class="nav-item"><a class="nav-link"  th:href="@{/categories}">Gérer Catégorie</a></li>
-=======
-                        <li class="nav-item"><a class="nav-link" href="/">Accueil</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/ads">Gérer Annonce</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/categories">Gérer Catégorie</a></li>
->>>>>>> 670f3ff102e89134c1f4e59272ee87104ab33621
+
+                        <li class="nav-item"><a class="nav-link" th:href="@{/home}">Accueil</a></li>
+                        <li class="nav-item"><a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/ads}">Gérer Annonce</a></li>
+                        <li class="nav-item"><a class="nav-link"  sec:authorize="isAuthenticated()" th:href="@{/categories}">Gérer Catégorie</a></li>
+
+                        
                         <li class="nav-item"><a class="nav-link" href="#">À propos</a></li>
                         <div sec:authorize="isAuthenticated()">
                             <form th:action="@{/logout}" method="post">
                                 <button type="submit" class="nav-link" style="color: red;">
-                                    Déconnecter <span sec:authentication="name"></span>
+                                    Déconnecter <span  sec:authentication="name"></span>
                                 </button>
                             </form> 
                            

@@ -14,18 +14,18 @@ import jakarta.annotation.PostConstruct;
 
 @SpringBootApplication
 public class MiniprojectApplication {
-	/*@Autowired
-	 UserService userService;*/
+	@Autowired
+	 UserService userService;
 
 	public static void main(String[] args) {
 		SpringApplication.run(MiniprojectApplication.class, args);
 	}
- 	 /*@PostConstruct
+ 	@PostConstruct
     public void init() {
         List<String> roles = new ArrayList<>();
         roles.add("ADMIN");
 		roles.add("SUPER_ADMIN");
         userService.saveUser(new User(null, "admin", "admin", "admin@gmail.com", roles));
-    }   */
+    }   
 
 }

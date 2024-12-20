@@ -260,11 +260,8 @@ System.out.println("Fichier : " + file.getOriginalFilename());
             @RequestParam MultipartFile file) {
 
         if (bindingResult.hasErrors()) {
-<<<<<<< HEAD
-            
-=======
+
             model.addAttribute("errors", bindingResult.getAllErrors());
->>>>>>> 670f3ff102e89134c1f4e59272ee87104ab33621
             return "edit-ad";
         }
 
