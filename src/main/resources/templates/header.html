@@ -2,52 +2,172 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page</title>
     <link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        /* Navigation Bar */
+        .navbar {
+            background-color: #ffffff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 10px 15px;
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-brand img {
+            margin-right: 10px;
+            max-width: 50px;
+            height: auto;
+        }
+
+        .navbar-nav {
+            align-items: center;
+        }
+
+        .nav-item {
+            margin-left: 10px;
+        }
+
+        .nav-link {
+            color: #333;
+            font-weight: 500;
+            font-size: 1rem;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: #1cc88a;
+        }
+
+        /* Auth Buttons */
+        .auth-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-auth {
+            padding: 6px 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f8f9fa;
+            color: #333;
+            font-size: 0.9rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .btn-auth:hover {
+            background-color: #1cc88a;
+            color: white;
+            border-color: #1cc88a;
+        }
+
+        .btn-logout {
+            color: #dc3545;
+            font-size: 0.9rem;
+            border: none;
+            background: none;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .btn-logout:hover {
+            color: #a71d2a;
+        }
+
+        /* Container adjustments */
+        .container {
+            padding: 0 15px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .auth-buttons {
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .nav-item {
+                margin-left: 0;
+            }
+
+            .navbar-brand {
+                font-size: 1.2rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .navbar {
+                padding: 5px 10px;
+            }
+
+            .btn-auth {
+                font-size: 0.8rem;
+                padding: 5px 10px;
+            }
+        }
+    </style>
 </head>
 <body>
     <div th:fragment="header">
         <!-- Navigation Bar -->
         <nav class="navbar navbar-expand-lg navbar-light fixed-top">
             <div class="container">
-
-
-                
-
-                <a class="navbar-brand" th:href="@{/home}"><img src="/images/slogo.png" alt="Une belle vue" width="100" height="100" /></a>
-
+                <a class="navbar-brand" th:href="@{/home}">
+                    <img src="/images/slogo.png" alt="Logo" width="200" height="200">
+                </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto">
-
-                        <li class="nav-item"><a class="nav-link" th:href="@{/home}">Accueil</a></li>
-                        <li class="nav-item"><a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/ads}">Gérer Annonce</a></li>
-                        <li class="nav-item"><a class="nav-link"  sec:authorize="isAuthenticated()" th:href="@{/categories}">Gérer Catégorie</a></li>
-
-                        
-                        <li class="nav-item"><a class="nav-link" href="#">À propos</a></li>
-                        <div sec:authorize="isAuthenticated()">
-                            <form th:action="@{/logout}" method="post">
-                                <button type="submit" class="nav-link" style="color: red;">
-                                    Déconnecter <span  sec:authentication="name"></span>
-                                </button>
-                            </form> 
-                           
-                                
-                                <form th:action="@{/register}" method="get">
-                                    <button type="submit" class="nav-link" style="color: rgb(51, 6, 110);">
-                                        Register 
-                                    </button>
-                                </form> 
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/home}">Accueil</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/ads}">Gérer Annonce</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/categories}">Gérer Catégorie</a>
+                        </li>
+                        <div sec:authorize="!isAuthenticated()">
+                            <li class="nav-item">
+                                <a class="nav-link" href="@{/login}">Se connecter</a>
+                            </li>
                         </div>
-                        
-                            <div sec:authorize="!isAuthenticated()"><li class="nav-item"><a class="nav-link" href="@{/login}">Connecter</a></li></div>
-                        
+                        <div sec:authorize="isAuthenticated()" class="d-flex align-items-center">
+                            <form th:action="@{/logout}" method="post" class="me-2">
+                                <button type="submit" class="btn btn-outline-danger">
+                                    Déconnecter <span sec:authentication="name"></span>
+                                </button>
+                            </form>
+                            <form th:action="@{/register}" method="get">
+                                <button type="submit" class="btn btn-outline-primary">
+                                    S'inscrire
+                                </button>
+                            </form>
+                        </div>
                     </ul>
                 </div>
             </div>
         </nav>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

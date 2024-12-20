@@ -51,7 +51,7 @@ public class AdForm {
     @NotNull(message = "The category is required.")
     private Long categoryId; // ID de la catégorie associée
     private String photo;
-    private boolean isFavoris;
+
 
     @NotBlank(message = "The ad type is required.")
     @Size(max = 50, message = "The ad type cannot exceed 50 characters.")

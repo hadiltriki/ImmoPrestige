@@ -31,11 +31,8 @@ public class AdServiceImpl implements AdService{
  
     public AdServiceImpl(AdRepository adRepository){
      this.adRepository=adRepository;
-  
-     
-     
-
     }
+
     @Override
     public List<Ad> getAds() {
        return  this.adRepository.findAll();
@@ -87,7 +84,7 @@ public class AdServiceImpl implements AdService{
        adExisting.setArea(ad.getArea());
        ad.setCategory(ad.getCategory());
        ad.setContact(ad.getContact());
-       ad.setFavoris(ad.isFavoris());
+    
        ad.setNumberOfRooms(ad.getNumberOfRooms());
        ad.setPhoto(ad.getPhoto());
        ad.setTitle(ad.getTitle());

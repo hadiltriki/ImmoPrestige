@@ -208,7 +208,7 @@
 
             <!-- Prix -->
             <div>
-                <label for="price" class="form-label">Prix (€) :</label>
+                <label for="price" class="form-label">Prix (DT) :</label>
                 <input type="number" step="0.01" id="price" name="price" th:field="*{price}" class="form-control">
                 <small class="text-muted">Indiquez le prix en euros (facultatif).</small>
                 <span class="error text-danger" th:if="${#fields.hasErrors('price')}" th:errors="*{price}">Erreur sur le prix</span>
