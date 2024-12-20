@@ -2,95 +2,129 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
+    <meta charset="UTF-8">
     <title>Register Page</title>
-    <link th:replace="layout/default-layout::link">
+
     <style>
-        .profile-image-pic {
-            height: 200px;
-            width: 200px;
-            object-fit: cover;
+        /* Style général de la page */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
         }
 
-        .cardbody-color {
-            background-color: #ebf2fa;
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
         }
 
-        a {
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        .form-text {
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .form-control:focus {
+            border-color: #4CAF50;
+            outline: none;
+        }
+
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            border-radius: 4px;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+
+        .alert {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            display: none;
+        }
+
+        .alert.show {
+            display: block;
+        }
+
+        .form-text a {
+            color: #4CAF50;
             text-decoration: none;
+        }
+
+        .form-text a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 
 <body>
+
     <div class="container">
-        <div class="row">
-            <div class="col-md-6 offset-md-3">
-                <h2 class="text-center text-dark mt-5">Welcome to MyFirstSpringMVCApp</h2>
-                <div class="text-center mb-5 text-dark">User Registration</div>
-                <div class="card my-5">
-                    <!-- Formulaire lié à l'objet User -->
-                    <form th:action="@{/register}" th:object="${user}" method="post" class="card-body cardbody-color p-lg-5">
-                        <div class="text-center">
-                            <img th:src="@{/images/logo.png}"
-                                class="img-fluid profile-image-pic img-thumbnail rounded-circle my-3" width="200px"
-                                alt="profile">
-                        </div>
-                        <!-- Affichage des erreurs -->
-                        <div th:if="${msgError}" class="alert alert-danger" role="alert">
-                            <span th:text="${msgError}"></span>
-                        </div>
+        <h2>Welcome to MyFirstSpringMVCApp</h2>
+        <div class="form-text">User Registration</div>
 
-                        <!-- Champs du formulaire -->
-                        <div class="mb-3">
-                            <input type="text" class="form-control" name="firstName" id="firstName"
-                                placeholder="First Name" th:field="*{firstName}" required>
-                        </div>
+        <div class="alert" id="msgError" role="alert">
+            <!-- Erreur d'enregistrement (visible si msgError existe) -->
+            <span id="msgErrorText"></span>
+        </div>
 
-                        <div class="mb-3">
-                            <input type="text" class="form-control" name="lastName" id="lastName"
-                                placeholder="Last Name" th:field="*{lastName}" required>
-                        </div>
+        <form th:action="@{/register}" th:object="${user}" method="post">
 
-                        <div class="mb-3">
-                            <input type="email" class="form-control" name="email" id="email"
-                                placeholder="Email" th:field="*{email}" required>
-                        </div>
+            <input type="text" class="form-control" name="name" id="name" placeholder="name" th:field="*{name}" required>
 
-                        <div class="mb-3">
-                            <input type="password" class="form-control" name="password" id="password"
-                                placeholder="Password" th:field="*{password}" required>
-                        </div>
+            <input type="email" class="form-control" name="email" id="email" placeholder="Email" th:field="*{email}" required>
 
-                        <div class="mb-3">
-                            <input type="text" class="form-control" name="phone" id="phone"
-                                placeholder="Phone" th:field="*{phone}">
-                        </div>
+            <input type="password" class="form-control" name="password" id="password" placeholder="Password" th:field="*{password}" required>
 
-                        <div class="mb-3">
-                            <input type="text" class="form-control" name="adress" id="adress"
-                                placeholder="Address" th:field="*{adress}">
-                        </div>
+         
+            <button type="submit" class="btn">Register</button>
+        </form>
 
-                        <!-- Champs pour les rôles -->
-                        <div class="mb-3 form-check">
-                            <label for=""><strong>Role(s):</strong></label>
-                            <input type="checkbox" th:field="*{roles}" name="roles" value="ADMIN" /> Admin
-                            <input type="checkbox" th:field="*{roles}" name="roles" value="MODERATOR" /> Moderator
-                            <input type="checkbox" th:field="*{roles}" name="roles" value="USER" /> User
-                        </div>
-
-                        <div class="text-center">
-                            <button type="submit" class="btn btn-info px-5 mb-5 w-100">Register</button>
-                        </div>
-
-                        <div id="emailHelp" class="form-text text-center mb-5 text-dark">You have an Account?
-                            <a th:href="@{/login}" class="text-dark fw-bold">Login</a>
-                        </div>
-                    </form>
-                </div>
-            </div>
+        <div class="form-text">
+            You have an Account? <a th:href="@{/login}">Login</a>
         </div>
     </div>
+
+    <script>
+        // Exemple pour afficher l'alerte en cas d'erreur (côté serveur)
+        var msgError = /*[[${msgError}]]*/ null;
+        if (msgError) {
+            document.getElementById('msgError').classList.add('show');
+            document.getElementById('msgErrorText').textContent = msgError;
+        }
+    </script>
+
 </body>
 
 </html>

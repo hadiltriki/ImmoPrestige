@@ -1,4 +1,7 @@
-/*package com.tekup.miniproject.web.controllers;
+package com.tekup.miniproject.web.controllers;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.Authentication;
@@ -36,7 +39,7 @@ public class AuthController {
 
     @GetMapping("/register")
     public String register(Authentication authentication, Model model) {
-        if (authentication != null && authentication.isAuthenticated()) {
+        if (!authentication.isAuthenticated()) {
             return "redirect:/access-denied"; // Utilisateur déjà connecté
         }
         model.addAttribute("user", new User()); // Crée un nouvel utilisateur pour le formulaire
@@ -46,11 +49,14 @@ public class AuthController {
     @PostMapping("/register")
     public String saveUser(@ModelAttribute User user, Model model) {
         try {
+            List<String> roles = new ArrayList<>();
+        roles.add("ADMIN");
+            user.setRoles(roles);
             userService.saveUser(user); // Sauvegarde l'utilisateur
         } catch (DataIntegrityViolationException e) {
             model.addAttribute("msgError", "Email or username already exists");
             return "register-user"; // Réaffiche le formulaire avec le message d'erreur
         }
-        return "redirect:/login";
+        return "redirect:/home";
     }
-}*/
+}

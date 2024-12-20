@@ -2,23 +2,42 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}">
 </head>
 <body>
     <div th:fragment="header">
         <!-- Navigation Bar -->
         <nav class="navbar navbar-expand-lg navbar-light fixed-top">
             <div class="container">
+                <img src="/images/slogo.png" alt="Une belle vue" width="100" height="100" />
+
                 <a class="navbar-brand" href="#">ImmoPrestige</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto">
-                        <li class="nav-item"><a class="nav-link" href="#">Accueil</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#">Gérer Annonce</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#">Gérer Catégorie</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/">Accueil</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/ads">Gérer Annonce</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/categories">Gérer Catégorie</a></li>
                         <li class="nav-item"><a class="nav-link" href="#">À propos</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#">Login</a></li>
+                        <div sec:authorize="isAuthenticated()">
+                            <form th:action="@{/logout}" method="post">
+                                <button type="submit" class="nav-link" style="color: red;">
+                                    Déconnecter <span sec:authentication="name"></span>
+                                </button>
+                            </form> 
+                           
+                                
+                                <form th:action="@{/register}" method="get">
+                                    <button type="submit" class="nav-link" style="color: rgb(51, 6, 110);">
+                                        Register 
+                                    </button>
+                                </form> 
+                        </div>
+                        
+                            <div sec:authorize="!isAuthenticated()"><li class="nav-item"><a class="nav-link" href="@{/login}">Connecter</a></li></div>
+                        
                     </ul>
                 </div>
             </div>

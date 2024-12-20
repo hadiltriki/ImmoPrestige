@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+
 import java.util.List;
 import java.util.OptionalDouble;
 import java.util.OptionalInt;
@@ -51,7 +52,7 @@ import jakarta.validation.Valid;
  */
 
 @Controller
-@RequestMapping("/ads")
+@RequestMapping
 public class AdController {
 
     public static String uploadDirectory = System.getProperty("user.dir") + "/src/main/resources/static/images";
@@ -66,23 +67,24 @@ public class AdController {
     }
 
 
-    @RequestMapping("/home")
-public String getThreePersons(Model model) {
+    @RequestMapping({"/", "/home"})
+public String getHomePage(Model model) {
     List<Ad> ads = this.adService.getAds(); // Récupérer toutes les annonces
     int adsCount = ads.size(); // Nombre d'annonces dans la liste
     
     // Condition pour limiter le nombre d'annonces affichées
-    if (adsCount == 2) {
-        ads = ads.stream().limit(2).collect(Collectors.toList()); // Afficher 2 annonces
-    } else if (adsCount >= 3) {
-        ads = ads.stream().limit(3).collect(Collectors.toList()); // Afficher 3 annonces
+   if (adsCount >= 3) {
+        
+            ads = ads.subList(ads.size() - 3, ads.size());
+      
+ // Afficher 3 dernieres annonces
     } else {
         ads = new ArrayList<>(); // Ne rien afficher si la taille est inférieure à 1 ou autre condition
     }
 
     model.addAttribute("ads", ads); 
     
-    return "homeP";  // Retourner la vue avec la liste des annonces
+    return "homePrincipale";  // Retourner la vue avec la liste des annonces
 }
 
 
@@ -102,7 +104,7 @@ public String getThreePersons(Model model) {
        return "ad-list";
     } */
     
-  @RequestMapping()
+  @RequestMapping("/ads")
     public String getAllPersons(Model model) {
         List<Ad> ads = this.adService.getAds();
          OptionalDouble minPrice = ads.stream().mapToDouble(Ad::getPrice).min(); 
@@ -224,7 +226,7 @@ System.out.println("Fichier : " + file.getOriginalFilename());
         return "redirect:/ads";
     }
 
-    @RequestMapping("/{id}/edit")
+    @RequestMapping("ads/{id}/edit")
     public String showEditAdForm(@PathVariable Long id, Model model) {
         Ad ad = this.adService.getAdById(id);
 
@@ -254,6 +256,7 @@ System.out.println("Fichier : " + file.getOriginalFilename());
             @RequestParam MultipartFile file) {
 
         if (bindingResult.hasErrors()) {
+            model.addAttribute("errors", bindingResult.getAllErrors());
             return "edit-ad";
         }
 

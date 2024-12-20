@@ -18,27 +18,22 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Entity
-@Table(name="users")
+@Table(name = "users")
 @AllArgsConstructor
 @NoArgsConstructor
 public class User {
-    @Id
+	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-    private String firstName;
-    private String lastName;
-    private String email;
-    private String password;
-  
-   
-    private String phone;
-    private String adress;
-    	@ElementCollection(fetch= FetchType.EAGER)
-	@CollectionTable(
-			name="roles",
-			joinColumns = @JoinColumn(name="id")
-			)
-	
+	private String name;
+
+	private String password;
+	private String email;
+
+	@ElementCollection(fetch = FetchType.EAGER)
+	@CollectionTable(name = "roles", joinColumns = @JoinColumn(name = "id"))
+	@Column(name = "role")
+
 	private List<String> roles;
 
 }
