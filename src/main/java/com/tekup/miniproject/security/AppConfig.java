@@ -1,4 +1,4 @@
-/*package com.tekup.miniproject.security;
+package com.tekup.miniproject.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,4 +11,4 @@ public class AppConfig {
             return new BCryptPasswordEncoder();
     }
 
-}*/
+}
