@@ -29,7 +29,7 @@ public class Ad {
     private Category category;
 
     private String photo;
-    private boolean isFavoris;
+    
     private String adType;
 
 }

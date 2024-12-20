@@ -33,7 +33,7 @@ public interface AdService {
     List<Ad> getAdSortedByArea(String order);
     
     Page<Ad> getAllAdPagination(Pageable pegeable);
-    Page<Ad> getAdSortedByPricePagination(String order,Pageable pegeable);
+    Page<Ad> getAdSortedByPricePagination(String order,Pageable pageable);
   
     //create
     Ad addAd(Ad ad);

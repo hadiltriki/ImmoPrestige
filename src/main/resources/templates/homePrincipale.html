@@ -20,28 +20,45 @@
         .hero-section {
             text-align: center;
             padding: 120px 20px;
-            background: linear-gradient(to right, #4e73df, #1cc88a);
+            background: linear-gradient(270deg, #4e73df, #1cc88a);
             color: white;
             position: relative;
             overflow: hidden;
+            animation: gradientShift 5s infinite;
         }
+
+        @keyframes gradientShift {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
         .hero-section h1 {
             font-size: 3.5rem;
             font-weight: 700;
             text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
             animation: fadeInDown 1s ease-in-out;
         }
+
         .hero-section p {
             font-size: 1.2rem;
             margin-bottom: 20px;
             animation: fadeInUp 1.2s ease-in-out;
         }
+
         .hero-section .btn {
             padding: 12px 30px;
             border-radius: 50px;
             font-size: 1.1rem;
             transition: all 0.3s ease;
         }
+
         .hero-section .btn-primary:hover {
             background-color: #0f62fe;
             transform: scale(1.05);
@@ -70,24 +87,6 @@
             }
         }
 
-        /* Navigation Bar */
-        .navbar {
-            background-color: rgba(255, 255, 255, 0.95);
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        .navbar-brand {
-            font-weight: bold;
-            font-size: 1.8rem;
-        }
-        .nav-link {
-            color: #333;
-            font-weight: 500;
-            transition: color 0.3s ease;
-        }
-        .nav-link:hover {
-            color: #1cc88a;
-        }
-
         /* Property Cards */
         .property-card {
             background: #fff;
@@ -96,18 +95,23 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s ease;
         }
+
         .property-card img {
             width: 100%;
             height: 200px;
             object-fit: cover;
         }
+
         .property-card:hover {
             transform: translateY(-10px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
         }
+
         .property-card h5 {
             margin-top: 10px;
             font-weight: 600;
         }
+
         .property-card p {
             color: #6c757d;
         }
@@ -118,6 +122,116 @@
             color: rgb(0, 0, 0);
             padding: 20px 0;
             text-align: center;
+        }
+
+        /* Navigation Bar */
+        .navbar {
+            background-color: #ffffff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 10px 15px;
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-brand img {
+            margin-right: 10px;
+            max-width: 50px;
+            height: auto;
+        }
+
+        .navbar-nav {
+            align-items: center;
+        }
+
+        .nav-item {
+            margin-left: 10px;
+        }
+
+        .nav-link {
+            color: #333;
+            font-weight: 500;
+            font-size: 1rem;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: #1cc88a;
+        }
+
+        /* Auth Buttons */
+        .auth-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-auth {
+            padding: 6px 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f8f9fa;
+            color: #333;
+            font-size: 0.9rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .btn-auth:hover {
+            background-color: #1cc88a;
+            color: white;
+            border-color: #1cc88a;
+        }
+
+        .btn-logout {
+            color: #dc3545;
+            font-size: 0.9rem;
+            border: none;
+            background: none;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .btn-logout:hover {
+            color: #a71d2a;
+        }
+
+        /* Container adjustments */
+        .container {
+            padding: 0 15px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .auth-buttons {
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .nav-item {
+                margin-left: 0;
+            }
+
+            .navbar-brand {
+                font-size: 1.2rem;
+            }
+        }
+
+
+        @media (max-width: 576px) {
+            .navbar {
+                padding: 5px 10px;
+            }
+
+            .btn-auth {
+                font-size: 0.8rem;
+                padding: 5px 10px;
+            }
         }
     </style>
 </head>
@@ -135,15 +249,13 @@
         </div>
     </header>
  
-
     <!-- Property Cards Section -->
     <section class="container my-5">
-        <h3 class="text-center mb-4">Nos Propriétés Populaires</h3>
+        <h3 class="text-center mb-4">Nos Derniers Propriétés Populaires</h3>
         <div class="row g-4">
             <div class="col-md-4" th:each="ad : ${ads}">
                 <div class="property-card">
-                    <img th:src="(${ad.photo}?@{|/images/${ad.photo}|}:@{'/images/default.png'})" alt="photo"
-                        style="max-height: 250px; max-width: 400px;">
+                    <img th:src="(${ad.photo}?@{|/images/${ad.photo}|}:@{'/images/default.png'})" alt="photo">
                     <div class="p-3">
                         <h5 th:text="${ad.title}"></h5>
                         <p th:text="${ad.description}"></p>
@@ -151,13 +263,10 @@
                     </div>
                 </div>
             </div>
-            
-          
         </div>
         <div class="mt-3">
-
             <a href="/ads" class="btn btn-outline-primary w-100">Consulter plus</a>
-    </div>
+        </div>
     </section>
 
     <!-- Footer -->

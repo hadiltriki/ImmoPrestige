@@ -152,14 +152,14 @@ model.addAttribute("roomsPlus", roomsPlus);
         return "ad-list";
     }
 
-    @RequestMapping("/create")
+    @RequestMapping("/ads/create")
     public String showAddAdForm(Model model) {
         model.addAttribute("adForm", new AdForm());
         model.addAttribute("categories", this.categoryService.getCategories());
         return "add-ad";
     }
 
-    @RequestMapping(path = "/create", method = RequestMethod.POST)
+    @RequestMapping(path = "/ads/create", method = RequestMethod.POST)
     public String addAd(@Valid @ModelAttribute AdForm adForm,
             BindingResult bindingResult,
             @RequestParam MultipartFile file,
@@ -226,7 +226,7 @@ model.addAttribute("roomsPlus", roomsPlus);
 System.out.println("Catégorie : " + adForm.getCategoryId());
 System.out.println("Fichier : " + file.getOriginalFilename());
 
-        return "redirect:/ads/home";
+        return "redirect:/ads";
     }
 
     @RequestMapping("ads/{id}/edit")
@@ -241,7 +241,7 @@ System.out.println("Fichier : " + file.getOriginalFilename());
                 ad.getPrice(),
                 ad.getNumberOfRooms(),
                 ad.getArea(),
-                ad.getCategory().getId(),ad.getPhoto(), ad.isFavoris(), ad.getAdType() 
+                ad.getCategory().getId(),ad.getPhoto(),  ad.getAdType() 
                 /* if ad(getbyid) exist in favoris where user= userConnecté */
         ));
         model.addAttribute("id", id);
@@ -274,7 +274,7 @@ System.out.println("Fichier : " + file.getOriginalFilename());
         ad.setPrice(adForm.getPrice());
         ad.setArea(adForm.getArea());
         ad.setNumberOfRooms(adForm.getNumberOfRooms());
-        ad.setFavoris(adForm.isFavoris());
+        
         ad.setAdType(adForm.getAdType());
         Category category = this.categoryService.getCategoryById(adForm.getCategoryId());
         ad.setCategory(category);
@@ -360,25 +360,6 @@ System.out.println("Fichier : " + file.getOriginalFilename());
         
     }
 
-    @RequestMapping(path = "{id}/addFavoris", method = RequestMethod.POST)
-    public String addFavoris(
-            @Valid @ModelAttribute AdForm adForm,
-            BindingResult bindingResult,
-            @PathVariable Long id,
-            Model model) {
-
-        Ad ad = this.adService.getAdById(id);
-
-        ad.setFavoris(!ad.isFavoris());
-
-        try {
-            this.adService.updateAd(id, ad);
-        } catch (Exception e) {
-            model.addAttribute("errorMessage", "Failed to update ad: " + e.getMessage());
-            return "ad-list";
-        }
-
-        return "redirect:/ads";
-    }
+    
 
 }
