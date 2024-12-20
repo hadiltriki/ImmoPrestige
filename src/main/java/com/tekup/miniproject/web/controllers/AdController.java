@@ -218,7 +218,7 @@ model.addAttribute("roomsPlus", roomsPlus);
 
         }
 
-        return "redirect:/ads";
+        return "redirect:/ads/home";
     }
 
     @RequestMapping("/{id}/edit")
