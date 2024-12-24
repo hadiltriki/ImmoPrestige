@@ -1,11 +1,29 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-<script type="text/javascript"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #333;
+        }
+        .error-message {
+            color: #d9534f;
+            font-size: 1.5rem;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
- <p style="color:red" th:text="|error: ${error}|"></p>
+    <div class="error-message" th:text="|Error: ${error}|"></div>
 </body>
 </html>

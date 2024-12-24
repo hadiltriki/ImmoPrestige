@@ -181,10 +181,7 @@ public class AdServiceImpl implements AdService{
     public List<Ad> getAdByLocation(String location) {
         return this.adRepository.findByLocation(location);
     }
-    @Override
-    public List<Ad> getAdByContact(String contact) {
-        return this.adRepository.findByContact(contact);
-    }
+  
     @Override
     public List<Ad> getAdByRooms(Integer rooms) {
         return this.adRepository.findByNumberOfRooms(rooms);
@@ -235,6 +232,11 @@ public class AdServiceImpl implements AdService{
 
     return results;
 }
+
+    @Override
+    public List<Ad> getAdByArea(Double area) {
+        return this.adRepository.findByArea(area);
+    }
 
 
     

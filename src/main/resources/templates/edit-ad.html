@@ -230,11 +230,11 @@
                 <label for="adType" class="form-label">Type d'annonce :</label>
                 <div class="radio-group">
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" id="location" name="adType" value="location" th:field="*{adType}">
+                        <input class="form-check-input" type="radio" id="location" name="adType" value="location" th:field="*{adType}" th:checked="${adType == 'location'}">
                         <label class="form-check-label" for="location">Location</label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" id="vente" name="adType" value="vente" th:field="*{adType}">
+                        <input class="form-check-input" type="radio" id="vente" name="adType" value="vente" th:field="*{adType}" th:checked="${adType == 'vente'}">
                         <label class="form-check-label" for="vente">Vente</label>
                     </div>
                 </div>

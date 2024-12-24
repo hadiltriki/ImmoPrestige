@@ -26,7 +26,7 @@ public class WebSecurityConfig {
         public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
                 http
                                 .authorizeHttpRequests(auth -> auth
-                                                .requestMatchers("/","/ads","/login",
+                                                .requestMatchers("/","/home","/access-denied","/ads","/login", "/register","/ads/search",
                                                                 "/images/**")
                                                 .permitAll().anyRequest().authenticated())
                                 // Tous les endpoints nécessitent une

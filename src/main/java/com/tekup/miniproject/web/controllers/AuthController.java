@@ -39,8 +39,8 @@ public class AuthController {
 
     @GetMapping("/register")
     public String register(Authentication authentication, Model model) {
-        if (!authentication.isAuthenticated()) {
-            return "redirect:/access-denied"; // Utilisateur déjà connecté
+        if (authentication == null && !authentication.isAuthenticated()) {
+            return "redirect:/access-denied";// Utilisateur déjà connecté
         }
         model.addAttribute("user", new User()); // Crée un nouvel utilisateur pour le formulaire
         return "register-user";

@@ -21,7 +21,7 @@ public interface AdService {
     List<Ad> getAdByCategory(String category);
     List<Ad> getAdByPrice(Double price);
     List<Ad> getAdByLocation(String location);
-    List<Ad> getAdByContact(String contact);
+    List<Ad> getAdByArea(Double area);
     List<Ad> getAdByType(String adType);
    
  

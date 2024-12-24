@@ -730,13 +730,13 @@ footer {
             <aside class="col-md-3">
                 <section class="filter-section">
                     <h5 class="mb-4">Filtres de Recherche</h5>
-                    <form id="filterForm" th:action="@{/filter}" method="get">
-                        <!-- Type de Propriété -->
+                    <form id="filterForm" th:action="@{|/ads/search|}" method="get">
+                        <!-- categorie de Propriété -->
                         <div class="mb-3">
-                            <label for="type" class="form-label">Type de Propriété</label>
-                            <select id="type" class="form-select" name="type">
+                            <label for="category" class="form-label">Catégorie de Propriété</label>
+                            <select id="category" class="form-select" name="category">
                                 <option value="all">Tous</option>
-                                <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
+                                <option th:each="category : ${categories}" th:value="${category.name}" th:text="${category.name}"></option>
                             </select>
                         </div>
             
@@ -744,7 +744,7 @@ footer {
 <div class="mb-3 filter-card">
     <label class="form-label fw-bold">Budget (DT)</label>
     <!-- Champ pour entrer une valeur -->
-    <input type="number" id="budgetInput" name="budgetInput" class="form-control" 
+    <input type="number" id="price" name="price" class="form-control" 
            placeholder="Saisir un budget" 
            min="${minPrice}" max="${maxPrice}" step="0.1" 
            th:value="${minPrice}"  th:attr="oninput='validateBudget(this, ' + ${minPrice} + ', ' + ${maxPrice} + ')'">
@@ -758,7 +758,7 @@ footer {
 <div class="mb-3 filter-card">
     <label class="form-label fw-bold">Surface (m²)</label>
     <!-- Champ pour entrer une valeur -->
-    <input type="number" id="surfaceInput" name="surfaceInput" class="form-control" 
+    <input type="number" id="area" name="area" class="form-control" 
            placeholder="Saisir une surface" 
            min="${minArea}" max="${maxArea}" step="0.1" 
            th:value="${minArea}"  th:attr="oninput='validateSurface(this, ' + ${minArea} + ', ' + ${maxArea} + ')'">
@@ -776,7 +776,7 @@ footer {
                         <div class="mb-3 filter-card">
                             <label for="rooms" class="form-label">Nombre de Chambres</label>
                             <select id="rooms" name="rooms" class="form-select">
-                                <option value="all">Tous</option>
+                                <option value=0>Tous</option>
                                 <option th:each="room : ${distinctRooms}" th:value="${room}" th:text="${room} + ' Chambre(s)'"></option>
                                 <option th:if="${roomsPlus != null}" th:value="${roomsPlus}" th:text="${roomsPlus} + ' Chambres+'"></option>
                             </select>
@@ -784,11 +784,11 @@ footer {
             
                         <!-- Type de Propriété -->
                         <div class="mb-3 filter-card">
-                            <label for="propertyType" class="form-label">Type de Propriété</label>
-                            <select id="propertyType" name="propertyType" class="form-select">
+                            <label for="adType" class="form-label">Type de Propriété</label>
+                            <select id="adType" name="adType" class="form-select">
                                 <option value="all">Tous</option>
-                                <option value="sale">Vente</option>
-                                <option value="rental">Location</option>
+                                <option value="vente">Vente</option>
+                                <option value="location">Location</option>
                             </select>
                         </div>
             
@@ -864,11 +864,16 @@ footer {
                     </button>
 
                     <a th:href="@{|/ads/${ad.id}/edit|}" sec:authorize="isAuthenticated()" class="btn btn-warning btn-sm">
+                       
                         Modifier
                     </a>
-                    <button class="btn btn-danger btn-sm" sec:authorize="isAuthenticated()" onclick="confirmDelete('${ad.id}')">
-                        Supprimer
-                    </button>
+                    <form th:action="@{|/ads/${ad.id}/delete|}"  method="post">
+                        
+                        <button type="submit" class="btn btn-danger btn-sm" sec:authorize="isAuthenticated()" 
+                                onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette annonce ?');">
+                            Supprimer
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -913,21 +918,25 @@ footer {
 
 
 
-    <!-- Pagination -->
+<!--     Pagination -->
+<div>
+    <ul class="pagination pagination-sm">
+      <li class="page-item" th:classappend="${currentPage==0?'disabled':''}">
+        <a class="page-link" th:href="${sortByPrice==null}?@{|/ads?page=${currentPage-1}|}:@{|/ads/filter?sortByPrice=${sortByPrice}&page=${currentPage-1}|}">&laquo;</a>
+      </li>
+      <li th:each="index: ${#numbers.sequence(0,totalPages -1)}" class="page-item"    
+          th:classappend="${currentPage==index ?'active':''}">
+        <a class="page-link"th:href="${sortByPrice==null}?@{|/ads?page=${index}|}:@{|/ads/filter?sortByPrice=${sortByAge}&page=${index}|}" th:text="${index+1}"></a>
+      </li>
+     
+      <li class="page-item"  th:classappend="${currentPage== totalPages -1?'disabled':''}">
+        <a class="page-link" th:href="${sortByPrice==null}?@{|/ads?page=${currentPage+1}|}:@{|/ads/filter?sortByAge=${sortByPrice}&page=${currentPage+1}|}">&raquo;</a>
+      </li>
+    </ul>
+  </div>
+    
    
-    <div class="custom-pagination mt-4">
-        <ul class="pagination">
-            <li class="page-item active">
-                <a class="page-link" href="#" onclick="changePage(1)">1</a>
-            </li>
-            <li class="page-item">
-                <a class="page-link" href="#" onclick="changePage(2)">2</a>
-            </li>
-            <li class="page-item">
-                <a class="page-link" href="#" onclick="changePage(3)">3</a>
-            </li>
-        </ul>
-    </div>
+    
 
 
 </section>
@@ -954,6 +963,7 @@ footer {
             input.value = maxArea ; // Empêche de dépasser maxArea
         }
     }
+    
 </script>
    
 
