@@ -26,7 +26,7 @@ public class WebSecurityConfig {
         public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
                 http
                                 .authorizeHttpRequests(auth -> auth
-                                                .requestMatchers("/","/home","/access-denied","/ads","/login", "/register","/ads/search",
+                                                .requestMatchers("/","/home","/access-denied","/ads","/login", "/register","/ads/search","/ads/filter",
                                                                 "/images/**")
                                                 .permitAll().anyRequest().authenticated())
                                 // Tous les endpoints nécessitent une
@@ -35,24 +35,21 @@ public class WebSecurityConfig {
                                 // .formLogin(Customizer.withDefaults()); // Active le formulaire de login par
                                 // défaut
                                 .formLogin((form) -> form
-                                                .loginPage("/login")
-                                                .permitAll()
+                                                .loginPage("/login") .permitAll()
                                                .defaultSuccessUrl("/home", true) // Rediriger vers home après login
-                                                /*/.successHandler((request, response, authentication) -> {
-                                                        // Si une URL sauvegardée existe (SavedRequest), y rediriger,
-                                                        // sinon rediriger vers home "/"
-                                                        var savedRequest = (org.springframework.security.web.savedrequest.DefaultSavedRequest) request
-                                                                        .getSession()
-                                                                        .getAttribute("SPRING_SECURITY_SAVED_REQUEST");
-                                                        if (savedRequest != null) {
-                                                                response.sendRedirect(savedRequest.getRequestURL());
-                                                        } else {
-                                                                response.sendRedirect("/home"); // URL par défaut si
-                                                                                            // aucune URL
-                                                                                            // sauvegardée n'existe
-                                                        }
-                                                })*/)
-                                .exceptionHandling((exceptionHandling) -> exceptionHandling
+                                              /* .successHandler((request, response, authentication) -> {
+                                                // Vérifiez l'URL sauvegardée
+                                                var savedRequest = (org.springframework.security.web.savedrequest.DefaultSavedRequest) request
+                                                        .getSession()
+                                                        .getAttribute("SPRING_SECURITY_SAVED_REQUEST");
+                                                if (savedRequest != null) {
+                                                    System.out.println("Saved Request URL: " + savedRequest.getRequestURL());
+                                                    response.sendRedirect(savedRequest.getRequestURL());
+                                                } else {
+                                                    response.sendRedirect("/home");
+                                                }
+                                            })*/
+                                ).exceptionHandling((exceptionHandling) -> exceptionHandling
                                                 .accessDeniedPage("/access-denied"))
                                 .logout((logout) -> logout
                                 .logoutUrl("/logout") // URL pour la déconnexion

@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Create Ad</title>
+    <link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}">
     
     <!-- Liens vers les Styles -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
@@ -216,7 +217,7 @@
 
             <!-- Nombre de pièces -->
             <div>
-                <label for="numberOfRooms" class="form-label">Nombre de pièces :</label>
+                <label for="numberOfRooms" class="form-label">Nombre de chambres :</label>
                 <input type="number" id="numberOfRooms" name="numberOfRooms" th:field="*{numberOfRooms}" class="form-control">
                 <span class="error text-danger" th:if="${#fields.hasErrors('numberOfRooms')}" th:errors="*{numberOfRooms}">Erreur sur le nombre de pièces</span>
             </div>

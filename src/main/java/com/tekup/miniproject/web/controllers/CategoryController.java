@@ -3,6 +3,7 @@ package com.tekup.miniproject.web.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -40,14 +41,20 @@ public class CategoryController {
     }
 
     @GetMapping("")
-    public String getAllPerson(Model model) {
+    public String getAllPerson(Authentication authentication,Model model ) {
+        if (!(authentication != null && authentication.isAuthenticated())) {
+            return "redirect:/access-denied";// Utilisateur déjà connecté
+        }
         List<Category> categories = categoryService.getCategories();
         model.addAttribute("categories", categories);
         return "category-list";
     }
 
     @GetMapping("/create")
-    public String showAddCategoryForm(Model model) {
+    public String showAddCategoryForm(Model model, Authentication authentication) {
+        if (!(authentication != null && authentication.isAuthenticated())) {
+            return "redirect:/access-denied";// Utilisateur déjà connecté
+        }
         CategoryForm categoryForm = new CategoryForm();
         model.addAttribute("categoryForm", categoryForm);
         return "add-category";
@@ -68,7 +75,10 @@ public class CategoryController {
     }
 
     @GetMapping("/{id}/edit")
-    public String showEditCategoryForm(@PathVariable Long id, Model model) {
+    public String showEditCategoryForm(@PathVariable Long id, Model model, Authentication authentication) {
+        if (!(authentication != null && authentication.isAuthenticated())) {
+            return "redirect:/access-denied";// Utilisateur déjà connecté
+        }
 
         Category category = categoryService.getCategoryById(id);
         model.addAttribute("categoryForm", new CategoryForm(category.getName(), category.getDescription()));

@@ -20,12 +20,11 @@ public class MiniprojectApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(MiniprojectApplication.class, args);
 	}
-<<<<<<< HEAD
+
  /*	@PostConstruct
 =======
  	/*@PostConstruct
->>>>>>> 899c36166c5e62f1a33d57dac05d951d0848f0ea
-    public void init() {
+   public void init() {
         List<String> roles = new ArrayList<>();
         roles.add("ADMIN");
 		roles.add("SUPER_ADMIN");

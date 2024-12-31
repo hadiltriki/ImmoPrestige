@@ -1,5 +1,6 @@
 package com.tekup.miniproject.business.servicesImpl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -151,8 +152,8 @@ public class AdServiceImpl implements AdService{
         }
         return this.adRepository.findAll(pegeable); }
     @Override
-    public Page<Ad> getAdSortedByPricePagination(String order, Pageable pegeable) {
-        if(pegeable ==null){
+    public Page<Ad> getAdSortedByPricePagination(String order, Pageable pageable) {
+        if(pageable ==null){
             return null;
         }  
         Sort.Direction direction= Sort.Direction.ASC;
@@ -160,8 +161,8 @@ public class AdServiceImpl implements AdService{
             direction= Sort.Direction.DESC;
         }
         Pageable sortedPageable=PageRequest.of(
-            pegeable.getPageNumber(),
-            pegeable.getPageSize(),
+            pageable.getPageNumber(),
+            pageable.getPageSize(),
             Sort.by(direction,"price")
         );
         return this.adRepository.findAll(sortedPageable);
@@ -169,13 +170,20 @@ public class AdServiceImpl implements AdService{
    
     @Override
     public List<Ad> getAdByCategory(String category) {
-        
+       
         return this.adRepository.findByCategoryName(category);
          
        }
     @Override
     public List<Ad> getAdByPrice(Double price) {
-       return this.adRepository.findByPrice(price);
+        List<Ad> listeAds= new ArrayList<Ad>();
+        for (Ad ad : this.adRepository.findAll()) {
+            if (ad.getPrice()<= price)
+            {
+                listeAds.add(ad);
+            }
+        }
+       return listeAds;
     }
     @Override
     public List<Ad> getAdByLocation(String location) {
@@ -190,7 +198,6 @@ public class AdServiceImpl implements AdService{
     // Liste pour stocker les résultats filtrés
     List<Ad> results;
 
-    // Commencer par chercher tous les résultats
     results = adRepository.findAll();
 
     // Appliquer les filtres un par un
@@ -235,8 +242,31 @@ public class AdServiceImpl implements AdService{
 
     @Override
     public List<Ad> getAdByArea(Double area) {
+        List<Ad> listeAds= new ArrayList<Ad>();
+        for (Ad ad : this.adRepository.findAll()) {
+            if (ad.getArea()<= area)
+            {
+                listeAds.add(ad);
+            }
+        }
         return this.adRepository.findByArea(area);
     }
+
+    @Override
+    public Page<Ad> getAdSortedBySurfacePagination(String order, Pageable pageable) {
+        if(pageable ==null){
+            return null;
+        }  
+        Sort.Direction direction= Sort.Direction.ASC;
+        if("desc".equalsIgnoreCase(order)){
+            direction= Sort.Direction.DESC;
+        }
+        Pageable sortedPageable=PageRequest.of(
+            pageable.getPageNumber(),
+            pageable.getPageSize(),
+            Sort.by(direction,"area")
+        );
+        return this.adRepository.findAll(sortedPageable);}
 
 
     

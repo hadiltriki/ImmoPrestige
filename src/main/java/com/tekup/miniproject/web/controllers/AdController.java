@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -86,26 +87,10 @@ public class AdController {
         return "homePrincipale"; // Retourner la vue avec la liste des annonces
     }
 
-    /*
-     * @RequestMapping()
-     * public String getAllPerson( @RequestParam(defaultValue = "0") int page,
-     * 
-     * @RequestParam(defaultValue = "3") int pageSize
-     * ,Model model) {
-     * Page<Ad> adPage = this.adService.getAllAdPagination(PageRequest.of(page,
-     * pageSize));
-     * 
-     * model.addAttribute("ads", adPage.getContent());
-     * model.addAttribute("pageSize", pageSize);
-     * model.addAttribute("currentPage", page);
-     * model.addAttribute("totalPages", adPage.getTotalPages());
-     * return "ad-list";
-     * }
-     */
-
     @RequestMapping("/ads")
     public String getAllPersons(@RequestParam(defaultValue = "0") int page,
-    @RequestParam(defaultValue = "6") int pageSize,Model model) {
+            @RequestParam(defaultValue = "null") String sortByPrice,
+            @RequestParam(defaultValue = "6") int pageSize, Model model) {
         Page<Ad> ads = this.adService.getAllAdPagination(PageRequest.of(page, pageSize));
         OptionalDouble minPrice = ads.stream().mapToDouble(Ad::getPrice).min();
         OptionalDouble maxPrice = ads.stream().mapToDouble(Ad::getPrice).max();
@@ -124,42 +109,80 @@ public class AdController {
         // Ajouter la liste au modèle pour l'utiliser dans la vue
         model.addAttribute("distinctRooms", distinctRooms);
         model.addAttribute("roomsPlus", roomsPlus);
-     // Le numéro de la page actuelle (getNumber()).
-     model.addAttribute("ads", ads.getContent());
-     model.addAttribute("pageSize", pageSize);
-     model.addAttribute("currentPage", page);
-     model.addAttribute("totalPages", ads.getTotalPages());
+        // Le numéro de la page actuelle (getNumber()).
+        model.addAttribute("ads", ads.getContent());
+        model.addAttribute("pageSize", pageSize);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", ads.getTotalPages());
         model.addAttribute("minPrice", minPrice.isPresent() ? minPrice.getAsDouble() : 0);
         model.addAttribute("maxPrice", maxPrice.isPresent() ? maxPrice.getAsDouble() : 0);
         model.addAttribute("minArea", minArea.isPresent() ? minArea.getAsDouble() : 0);
         model.addAttribute("maxArea", maxArea.isPresent() ? maxArea.getAsDouble() : 0);
-
-        //model.addAttribute("ads", this.adService.getAds());
+        model.addAttribute("sortByPrice", sortByPrice);
         model.addAttribute("categories", this.categoryService.getCategories());
         return "catalogue";
     }
 
     @RequestMapping("/ads/filter")
-public String getAdSorted(
-        @RequestParam(required = false, defaultValue = "asc") String sortByPrice,
-        @RequestParam(defaultValue = "0") int page,
-        @RequestParam(defaultValue = "6") int pageSize,
-        Model model) {
-    Page<Ad> adPage = this.adService.getAdSortedByPricePagination(
-            sortByPrice,
-            PageRequest.of(page, pageSize)
-    );
-    model.addAttribute("ads", adPage.getContent());
-    model.addAttribute("sortByPrice", sortByPrice);
-    model.addAttribute("pageSize", pageSize);
-    model.addAttribute("currentPage", page);
-    model.addAttribute("totalPages", adPage.getTotalPages());
-    return "catalogue";
-}
+    public String getAdSorted(
+            @RequestParam(required = false) String sortByPrice,
+            @RequestParam(required = false) String sortBySurface,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "6") int pageSize,
+            Model model) {
+        Page<Ad> adPage;
 
+        // Gestion des triages par prix et par surface
+        if (sortByPrice != null && !sortByPrice.isEmpty()) {
+            adPage = this.adService.getAdSortedByPricePagination(
+                    sortByPrice,
+                    PageRequest.of(page, pageSize));
+        } else if (sortBySurface != null && !sortBySurface.isEmpty()) {
+            adPage = this.adService.getAdSortedBySurfacePagination(
+                    sortBySurface,
+                    PageRequest.of(page, pageSize));
+        } else {
+            adPage = this.adService.getAllAdPagination(PageRequest.of(page, pageSize));
+        }
+        Page<Ad> ads = this.adService.getAllAdPagination(PageRequest.of(page, pageSize));
+
+        OptionalDouble minPrice = ads.stream().mapToDouble(Ad::getPrice).min();
+        OptionalDouble maxPrice = ads.stream().mapToDouble(Ad::getPrice).max();
+        OptionalDouble minArea = ads.stream().mapToDouble(Ad::getArea).min();
+        OptionalDouble maxArea = ads.stream().mapToDouble(Ad::getArea).max();
+        List<Integer> distinctRooms = ads.stream()
+                .map(Ad::getNumberOfRooms) // Récupérer le nombre de chambres
+                .distinct() // Garder les valeurs distinctes
+                .sorted() // Trier les valeurs
+                .limit(4) // Limiter à 4
+                .collect(Collectors.toList()); // Collecter dans une liste
+
+        // Récupérer la 4ème valeur (si elle existe)
+        Integer roomsPlus = distinctRooms.size() == 4 ? distinctRooms.get(3) : null;
+
+        // Ajouter la liste au modèle pour l'utiliser dans la vue
+        model.addAttribute("distinctRooms", distinctRooms);
+        model.addAttribute("roomsPlus", roomsPlus);
+
+        model.addAttribute("ads", adPage.getContent());
+        model.addAttribute("sortByPrice", sortByPrice);
+        model.addAttribute("sortBySurface", sortBySurface);
+        model.addAttribute("pageSize", pageSize);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", adPage.getTotalPages());
+        model.addAttribute("minPrice", minPrice.isPresent() ? minPrice.getAsDouble() : 0);
+        model.addAttribute("maxPrice", maxPrice.isPresent() ? maxPrice.getAsDouble() : 0);
+        model.addAttribute("minArea", minArea.isPresent() ? minArea.getAsDouble() : 0);
+        model.addAttribute("maxArea", maxArea.isPresent() ? maxArea.getAsDouble() : 0);
+        model.addAttribute("categories", this.categoryService.getCategories());
+        return "catalogue";
+    }
 
     @RequestMapping("/ads/create")
-    public String showAddAdForm(Model model) {
+    public String showAddAdForm(Model model, Authentication authentication) {
+        if (!(authentication != null && authentication.isAuthenticated())) {
+            return "redirect:/access-denied";// Utilisateur déjà connecté
+        }
         model.addAttribute("adForm", new AdForm());
         model.addAttribute("categories", this.categoryService.getCategories());
         return "add-ad";
@@ -171,6 +194,7 @@ public String getAdSorted(
             @RequestParam MultipartFile file,
             Model model) throws IOException {
         if (bindingResult.hasErrors()) {
+            model.addAttribute("adForm", adForm);
             model.addAttribute("error", "Invalid input");
             model.addAttribute("categories", this.categoryService.getCategories());
 
@@ -235,7 +259,10 @@ public String getAdSorted(
     }
 
     @RequestMapping("ads/{id}/edit")
-    public String showEditAdForm(@PathVariable Long id, Model model) {
+    public String showEditAdForm(@PathVariable Long id, Model model, Authentication authentication) {
+        if (!(authentication != null && authentication.isAuthenticated())) {
+            return "redirect:/access-denied";
+        }
         Ad ad = this.adService.getAdById(id);
 
         model.addAttribute("adForm", new AdForm(
@@ -246,8 +273,8 @@ public String getAdSorted(
                 ad.getPrice(),
                 ad.getNumberOfRooms(),
                 ad.getArea(),
-                ad.getCategory().getId(), 
-                ad.getPhoto(), 
+                ad.getCategory().getId(),
+                ad.getPhoto(),
                 ad.getAdType()
 
         ));
@@ -267,6 +294,8 @@ public String getAdSorted(
             @RequestParam MultipartFile file) {
 
         if (bindingResult.hasErrors()) {
+            model.addAttribute("adForm", new AdForm());
+            model.addAttribute("categories", this.categoryService.getCategories());
 
             model.addAttribute("errors", bindingResult.getAllErrors());
             return "edit-ad";
@@ -337,31 +366,80 @@ public String getAdSorted(
             @RequestParam(required = false) Double price,
             @RequestParam(required = false) Double area,
             @RequestParam(required = false) Integer rooms,
-        
+
             @RequestParam(required = false) String category,
             @RequestParam(required = false) String adType,
             Model model) {
+        List<Ad> results = new ArrayList<>();
 
-                List<Ad> results = new ArrayList<>();
+        // Récupérer les résultats par adType, si spécifié
+        if (adType != null && !"all".equalsIgnoreCase(adType) && !adType.isEmpty()) {
+            results.addAll(adService.getAdByType(adType));
+        }
 
-                if (adType != null && !"all".equals(adType) && !adType.isEmpty()) {
-                    results = adService.getAdByType(adType);
-                }
-                
-                if (category != null && !"all".equals(category) && !category.isEmpty()) {
-                  
-                       
-                        // Ajout des résultats de la catégorie à la liste existante
-                        results.addAll(adService.getAdByCategory(category));
-                    
-                }
-                
-                // Supprimer les doublons dans la liste
-                results = results.stream().distinct().collect(Collectors.toList());
-                
-                if (results.isEmpty()) {
-                    results = adService.getAds();
-                }
+        OptionalDouble minAreaOpt = adService.getAds().stream()
+                .mapToDouble(Ad::getArea)
+                .min();
+
+        if (minAreaOpt.isPresent() && area != minAreaOpt.getAsDouble()) {
+            results.addAll(adService.getAdByArea(area));
+        }
+
+        if (rooms != 0) {
+            results.addAll(adService.getAdByRooms(rooms));
+        }
+        if (rooms == -1) {
+            // Récupérer toutes les annonces
+            List<Ad> ads = adService.getAds();
+
+            // Récupérer les valeurs distinctes des chambres
+            List<Integer> distinctRooms = ads.stream()
+                    .map(Ad::getNumberOfRooms)
+                    .distinct()
+                    .sorted()
+                    .skip(4)
+                    .collect(Collectors.toList());
+
+            // Filtrer les annonces pour correspondre aux chambres distinctes récupérées
+            for (Integer roomCount : distinctRooms) {
+                results.addAll(adService.getAdByRooms(roomCount));
+            }
+        }
+
+        OptionalDouble minPriceOp = adService.getAds().stream().mapToDouble(Ad::getPrice).min();
+
+        if (price != minPriceOp.getAsDouble()) {
+            results.addAll(adService.getAdByPrice(price));
+        }
+
+        if (location != "" && !location.isEmpty()) {
+            results.addAll(adService.getAdByLocation(location.toLowerCase()));
+        }
+
+        // Récupérer les résultats par category, si spécifié
+        if (category != null && !"all".equalsIgnoreCase(category) && !category.isEmpty()) {
+            results.addAll(adService.getAdByCategory(category));
+        }
+        if ("all".equalsIgnoreCase(category)
+                && location == ""
+                && price == minPriceOp.getAsDouble()
+                && rooms == 0
+                && "all".equalsIgnoreCase(adType)
+                && area == minAreaOpt.getAsDouble()) {
+            // Si toutes les conditions sont remplies, récupérer toutes les annonces
+            return "redirect:/ads";
+        }
+
+        // Supprimer les doublons
+        results = results.stream()
+                .distinct()
+                .collect(Collectors.toList());
+
+        // Vérifier si la liste est vide
+        if (results.isEmpty()) {
+            results = null;
+        }
+
         List<Ad> ads = this.adService.getAds();
         OptionalDouble minPrice = ads.stream().mapToDouble(Ad::getPrice).min();
         OptionalDouble maxPrice = ads.stream().mapToDouble(Ad::getPrice).max();
